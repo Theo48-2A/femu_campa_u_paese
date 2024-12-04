@@ -19,3 +19,6 @@ server/*.out
 # PostgreSQL
 db_data/
 
+# IDE visual studio
+*.code-workspace
+

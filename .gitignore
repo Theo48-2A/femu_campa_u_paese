@@ -1,0 +1,21 @@
+# Node.js (Client React)
+client/node_modules/
+client/build/
+
+# Go (Serveur Go)
+server/bin/
+server/*.exe
+server/*.out
+
+# Docker
+*.env
+*.env.*
+
+# Logs et fichiers temporaires
+*.log
+*.lock
+.DS_Store
+
+# PostgreSQL
+db_data/
+

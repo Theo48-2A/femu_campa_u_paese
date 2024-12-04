@@ -1,0 +1,37 @@
+/* App.css */
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.App-header {
+  color: #2e8b57;
+  font-size: 2rem;
+}
+
+.App-subtitle {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.App-buttons {
+  margin-top: 20px;
+}
+
+.App-button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #2e8b57;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.App-button:hover {
+  background-color: #246d49;
+}
+

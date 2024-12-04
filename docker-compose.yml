@@ -1,0 +1,40 @@
+version: '2.29.7'
+services:
+  client:
+    build:
+      context: ./client
+    container_name: client_container
+    ports:
+      - "3000:3000"
+
+  server:
+    build:
+      context: ./server
+    container_name: server_container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=theo
+      - DB_PASSWORD=yourpassword
+      - DB_NAME=user_db
+
+  db:
+    build:
+      context: ./db
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: theo
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: user_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+

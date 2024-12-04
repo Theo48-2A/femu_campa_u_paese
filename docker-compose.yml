@@ -1,10 +1,16 @@
 services:
   client:
     build:
-      context: ./client
+      context: ./client 
     container_name: client_container
     ports:
-      - "3000:3000"
+      - "3000:3000"  
+    volumes:
+      - ./client:/app  
+      - /app/node_modules  
+    environment:
+      - CHOKIDAR_USEPOLLING=true  
+
 
   server:
     build:
@@ -20,10 +26,11 @@ services:
       - DB_USER=theo
       - DB_PASSWORD=yourpassword
       - DB_NAME=user_db
+    networks:
+      - app-network
 
   db:
-    build:
-      context: ./db
+    image: postgres:17
     container_name: postgres_container
     environment:
       POSTGRES_USER: theo
@@ -33,7 +40,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
 

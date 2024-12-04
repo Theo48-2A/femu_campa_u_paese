@@ -1,10 +1,11 @@
 package main
 
 import (
-	"femu_campa_u_paese/graph"
 	"log"
 	"net/http"
 	"os"
+	"server/database"
+	"server/graph"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -18,6 +19,12 @@ func main() {
 		port = defaultPort
 	}
 
+	// Initialiser la base de données
+	dsn := "postgres://theo:yourpassword@db:5432/user_db"
+	database.InitDB(dsn)
+	defer database.CloseDB() // Ferme la base de données à la fin du programme
+
+	// Configurer le serveur GraphQL
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))

@@ -7,7 +7,7 @@ import (
 	"context"
 	"embed"
 	"errors"
-	"femu_campa_u_paese/graph/model"
+	"server/graph/model"
 	"fmt"
 	"strconv"
 	"sync"

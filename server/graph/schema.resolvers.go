@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 	"errors"
-	"femu_campa_u_paese/graph/model"
+	"server/graph/model"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"

@@ -1,13 +1,18 @@
 type Mutation {
+  register(username: String!, password: String!, email: String!, phoneNumber: String): AuthResponse!
   login(username: String!, password: String!): AuthResponse!
 }
 
 type AuthResponse {
-  token: String!
   user: User!
+  token: String!
+  message : String
 }
 
 type User {
   id: ID!
   username: String!
+  email: String!
+  phoneNumber: String
+  createdAt: String!
 }

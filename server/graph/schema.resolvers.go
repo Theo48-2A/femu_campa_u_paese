@@ -6,42 +6,49 @@ package graph
 
 import (
 	"context"
-	"errors"
+	"fmt"
+	"server/auth"
 	"server/graph/model"
-	"time"
-
-	jwt "github.com/golang-jwt/jwt/v5"
+	"server/users"
+	"strconv"
 )
 
-// Résolveur pour la mutation `login`
-func (r *mutationResolver) Login(ctx context.Context, username string, password string) (*model.AuthResponse, error) {
-	// Remplacez cette partie par une vraie validation (par exemple, base de données)
-	if username != "admin" || password != "password123" {
-		return nil, errors.New("invalid username or password")
-	}
-
-	// Créer un token JWT
-	expirationTime := time.Now().Add(15 * time.Minute) // Token valide 15 minutes
-	claims := &Claims{
-		Username: username,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(expirationTime),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtKey)
+// Register is the resolver for the register field.
+func (r *mutationResolver) Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error) {
+	// Enregistrement de l'utilisateur
+	message, err := users.Register(ctx, username, password, email, phoneNumber)
 	if err != nil {
-		return nil, errors.New("could not create token")
+		return nil, fmt.Errorf("error registering user: %v", err)
 	}
 
-	// Retourner le token et les informations utilisateur
 	return &model.AuthResponse{
-		Token: tokenString,
-		User: &model.User{
-			ID:       "1", // Id utilisateur fictif pour le test
-			Username: username,
-		},
+		Message: &message, // Convertit la chaîne en pointeur
+	}, nil
+}
+
+// Login is the resolver for the login field.
+func (r *mutationResolver) Login(ctx context.Context, username string, password string) (*model.AuthResponse, error) {
+	// Connexion utilisateur
+	user, err := users.Login(ctx, username, password)
+	if err != nil {
+		return nil, fmt.Errorf("error logging in: %v", err)
+	}
+
+	// Conversion de user.ID (string) en int
+	userID, err := strconv.Atoi(user.ID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid user ID: %v", err)
+	}
+
+	// Génération du token JWT
+	token, err := auth.GenerateJWT(int(userID), user.Username)
+	if err != nil {
+		return nil, fmt.Errorf("error generating JWT: %v", err)
+	}
+
+	return &model.AuthResponse{
+		Token: token,
+		User:  user,
 	}, nil
 }
 

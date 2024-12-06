@@ -1,6 +1,9 @@
-type Mutation {
-  register(username: String!, password: String!, email: String!, phoneNumber: String): AuthResponse!
-  login(username: String!, password: String!): AuthResponse!
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  phoneNumber: String
+  createdAt: String!
 }
 
 type AuthResponse {
@@ -9,10 +12,8 @@ type AuthResponse {
   message : String
 }
 
-type User {
-  id: ID!
-  username: String!
-  email: String!
-  phoneNumber: String
-  createdAt: String!
+type Mutation {
+  register(username: String!, password: String!, email: String!, phoneNumber: String): AuthResponse!
+  login(username: String!, password: String!): AuthResponse!
 }
+

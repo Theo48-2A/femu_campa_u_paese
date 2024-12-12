@@ -1,22 +1,48 @@
 import React, { useState } from "react";
 
+
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const response = await fetch("http://localhost:8080/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    const apiUrl = process.env.REACT_APP_API_URL
+    alert(apiUrl); // Vérifie si la variable est accessible
 
-    if (response.ok) {
-      const token = (await response.json()).token;
-      localStorage.setItem("token", token); // Stocker le token
-      alert("Connexion réussie !");
-    } else {
-      alert("Échec de la connexion.");
+    try {
+      const response = await fetch(`${apiUrl}/query`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `
+            mutation {
+              login(username: "${username}", password: "${password}") {
+                token
+                user {
+                  id
+                  username
+                  email
+                  phoneNumber
+                  createdAt
+                }
+                message
+              }
+            }
+          `,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.data.login.token;
+        localStorage.setItem("token", token); // Stocker le token
+        alert("Connexion réussie !");
+      } else {
+        alert("Échec de la connexion.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la connexion :", error);
+      alert("Erreur réseau ou serveur.");
     }
   };
 
@@ -41,5 +67,17 @@ function Login() {
 }
 
 export default Login;
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,44 +1,23 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import MainPage from "./components/MainPage/MainPage";
+import React from "react";
+import { UserProvider } from "./utils/UserContext";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
-import RandomPage from "./components/RandomPage/RandomPage";
+import MainPage from "./components/MainPage/MainPage";
+import HomePage from "./components/HomePage/HomePage"; // Import de la nouvelle page
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-  };
-
   return (
-    <Router>
-      <Routes>
-        {/* Page d'accueil */}
-        <Route
-          path="/"
-          element={
-            <MainPage
-              isAuthenticated={isAuthenticated}
-              onLogin={handleLogin}
-            />
-          }
-        />
-        {/* Page de connexion */}
-        <Route path="/login" element={<Login />} />
-        {/* Page d'inscription */}
-        <Route path="/register" element={<Register />} />
-        {/* Page random */}
-        <Route path="/random" element={<RandomPage />} />
-        {/* Redirection par défaut */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} /> {/* Page d'accueil */}
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

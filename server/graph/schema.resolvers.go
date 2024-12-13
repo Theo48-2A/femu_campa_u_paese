@@ -21,7 +21,26 @@ func (r *mutationResolver) Register(ctx context.Context, username string, passwo
 		return nil, fmt.Errorf("error registering user: %v", err)
 	}
 
+	user, err := users.Login(ctx, username, password)
+	if err != nil {
+		return nil, fmt.Errorf("error logging in: %v", err)
+	}
+
+	// Conversion de user.ID (string) en int
+	userID, err := strconv.Atoi(user.ID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid user ID: %v", err)
+	}
+
+	// Génération du token JWT
+	token, err := auth.GenerateJWT(int(userID), user.Username)
+	if err != nil {
+		return nil, fmt.Errorf("error generating JWT: %v", err)
+	}
+
 	return &model.AuthResponse{
+		Token:   token,
+		User:    user,
 		Message: &message, // Convertit la chaîne en pointeur
 	}, nil
 }

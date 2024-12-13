@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-
+import { useUser } from "../../utils/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useUser(); // Accéder à la fonction login du contexte
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const apiUrl = process.env.REACT_APP_API_URL
-    alert(apiUrl); // Vérifie si la variable est accessible
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
     try {
       const response = await fetch(`${apiUrl}/query`, {
@@ -25,7 +27,6 @@ function Login() {
                   phoneNumber
                   createdAt
                 }
-                message
               }
             }
           `,
@@ -34,9 +35,9 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        const token = data.data.login.token;
-        localStorage.setItem("token", token); // Stocker le token
+        login(data.data.login); // Mettre à jour le contexte utilisateur
         alert("Connexion réussie !");
+        navigate("/main"); // Rediriger vers la page principale
       } else {
         alert("Échec de la connexion.");
       }
@@ -67,17 +68,3 @@ function Login() {
 }
 
 export default Login;
-
-
-
-
-
-
-
-
-
-
-
-
-
-

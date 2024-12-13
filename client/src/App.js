@@ -1,9 +1,9 @@
 import React from "react";
 import { UserProvider } from "./utils/UserContext";
-import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
+import HomePage from "./components/HomePage/HomePage";
+import Login from "./components/HomePage/Login/Login";
+import Register from "./components/HomePage/Register/Register";
 import MainPage from "./components/MainPage/MainPage";
-import HomePage from "./components/HomePage/HomePage"; // Import de la nouvelle page
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -12,9 +12,9 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} /> {/* Page d'accueil */}
-          <Route path="/main" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/main" element={<MainPage />} />
         </Routes>
       </Router>
     </UserProvider>

@@ -11,6 +11,7 @@
     align-items: center;
     margin: 0;
     padding: 0;
+    position: relative;
 }
 
 /* Overlay */
@@ -24,7 +25,7 @@
     z-index: 1;
 }
 
-/* Contenu */
+/* Contenu avec bordure */
 .home-content {
     position: relative;
     z-index: 2;
@@ -36,14 +37,15 @@
     background: rgba(0, 0, 0, 0.5);
     max-width: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.3); /* Bordure subtile */
+    border: 2px solid rgba(243, 156, 18, 0.8); /* Ajout de la bordure dorée */
 }
+
 
 /* Titre */
 .home-title {
     font-size: 1.8rem;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     background: linear-gradient(to right, #f39c12, #e74c3c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -57,28 +59,59 @@
     margin-bottom: 15px;
 }
 
+/* Formulaire */
+.home-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Champs d'entrée */
+.home-input {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.home-input:focus {
+    border-color: rgba(52, 152, 219, 0.8);
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.8);
+}
+
 /* Boutons */
 .home-buttons {
     display: flex;
-    gap: 8px;
     justify-content: center;
+    gap: 15px; /* Espace entre les boutons */
+    margin-top: 12px;
 }
 
 .home-buttons button {
-    padding: 7px 15px;
-    font-size: 0.8rem;
+    padding: 6px 12px;
+    font-size: 0.85rem;
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     background: rgba(52, 152, 219, 0.8);
     color: white;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
 .home-buttons button:hover {
     background-color: rgba(41, 128, 185, 1);
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 .home-buttons button:active {
@@ -101,7 +134,47 @@
     }
 
     .home-buttons button {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         padding: 6px 12px;
     }
+
+    .home-input {
+        padding: 7px 10px;
+        font-size: 0.8rem;
+    }
 }
+
+/* Bouton de retour */
+.back-button {
+    position: absolute;
+    top: 10px; /* Réduit l'écart avec le haut */
+    left: 10px; /* Réduit l'écart avec la gauche */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 0.85rem; /* Réduit légèrement la taille de la flèche */
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: #f39c12; /* Même couleur au survol */
+}
+
+/* Conteneur pour le titre et l'icône */
+.home-title-container {
+    display: flex;
+    align-items: center; /* Centre verticalement le texte et l'icône */
+    justify-content: center; /* Centre horizontalement */
+    gap: 10px; /* Espace entre le titre et l'icône */
+}
+
+/* Style pour l'icône */
+.home-icon {
+    width: 30px; /* Taille de l'icône */
+    height: 30px;
+    object-fit: contain; /* Conserve le ratio de l'image */
+    margin-left: 5px;
+}
+

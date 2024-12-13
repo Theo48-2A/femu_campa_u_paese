@@ -62,14 +62,14 @@ function Login() {
         <form className="home-form">
           <input
             type="text"
-            placeholder="Nom d'utilisateur"
+            placeholder="Nome d'utilizatore"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="home-input"
           />
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder="Codice d'accessu"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="home-input"

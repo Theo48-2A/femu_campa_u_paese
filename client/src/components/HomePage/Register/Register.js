@@ -77,28 +77,28 @@ function Register() {
         <form className="home-form">
           <input
             type="text"
-            placeholder="Nom d'utilisateur"
+            placeholder="Nome d'utilizatore"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="home-input"
           />
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder="Codice d'accessu"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="home-input"
           />
           <input
             type="email"
-            placeholder="Adresse email"
+            placeholder="Indirizzu email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="home-input"
           />
           <input
             type="text"
-            placeholder="Numéro de téléphone"
+            placeholder="Numeru di telefunu"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             className="home-input"

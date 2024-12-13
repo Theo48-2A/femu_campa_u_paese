@@ -172,9 +172,8 @@
 
 /* Style pour l'icône */
 .home-icon {
-    width: 30px; /* Taille de l'icône */
-    height: 30px;
+    width: 40px; /* Taille de l'icône */
+    height: 45px;
     object-fit: contain; /* Conserve le ratio de l'image */
-    margin-left: 5px;
 }
 

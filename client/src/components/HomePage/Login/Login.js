@@ -37,7 +37,6 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         login(data.data.login);
-        alert("Connexion réussie !");
         navigate("/main");
       } else {
         alert("Échec de la connexion.");

@@ -20,7 +20,7 @@ function HomePage() {
         <div className="home-title-container">
           <h1 className="home-title">Femu Campà U Paese </h1>
           <img
-            src="/images/triangle_isula.jpg"
+            src="/images/triangle_corse2.jpg"
             alt="Triangle Isula"
             className="home-icon"
           />

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useUser } from "../../utils/UserContext";
 import { useNavigate } from "react-router-dom";
 import "./MainPage.css"; // Importer le CSS spécifique à la page
+import Sidebar from "./Sidebar/Sidebar"; // Inclure la barre de navigation
+
 
 function MainPage() {
   const { user, logout } = useUser();
@@ -19,6 +21,7 @@ function MainPage() {
 
   return (
     <div className="main-container">
+      <Sidebar />
       <header className="header">
         <h1>Bienvenue sur l'application</h1>
         <div className="header-actions">
@@ -34,10 +37,16 @@ function MainPage() {
         <p>Bienvenue dans votre tableau de bord, {user.user.username || "Utilisateur"} !</p>
         {showAccountInfo && (
           <div className="account-info">
-            <h3>Informations du compte</h3>
-            <p>Email : {user.user.email}</p>
-            <p>Téléphone : {user.user.phoneNumber}</p>
-          </div>
+          <h3>Informations du compte</h3>
+          <p>Email : {user.user.email}</p>
+          <p>Téléphone : {user.user.phoneNumber}</p>
+          <button
+            onClick={() => navigate("/profile")}
+            className="profile-button"
+          >
+            Voir le profil
+          </button>
+        </div>
         )}
       </main>
     </div>

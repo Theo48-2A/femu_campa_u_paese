@@ -17,3 +17,6 @@ type Mutation {
   login(username: String!, password: String!): AuthResponse!
 }
 
+type Query {
+  searchUsers(prefix: String!, limit: Int = 10): [User]!
+}

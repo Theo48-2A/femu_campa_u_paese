@@ -67,3 +67,25 @@
     max-width: 80%; /* Limite la largeur pour que ce soit agréable visuellement */
   }
   
+
+  .profile-button {
+    padding: 8px 16px;
+    background-color: rgba(52, 152, 219, 0.8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .profile-button:hover {
+    background-color: rgba(41, 128, 185, 1);
+    transform: scale(1.05);
+  }
+  
+  .profile-button:active {
+    transform: scale(0.95);
+  }
+  

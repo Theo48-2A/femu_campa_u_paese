@@ -1,0 +1,27 @@
+/* Conteneur des résultats */
+.search-results {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+  }
+  
+  /* Carte utilisateur */
+  .user-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-card p {
+    margin: 5px 0;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  

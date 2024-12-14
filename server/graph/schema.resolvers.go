@@ -8,21 +8,22 @@ import (
 	"context"
 	"fmt"
 	"server/auth"
+	login "server/content/accounts/login"
+	register "server/content/accounts/register"
+	search_users "server/content/social/search_users"
 	"server/graph/model"
-	"server/users"
 	"strconv"
-	"strings"
 )
 
 // Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error) {
 	// Enregistrement de l'utilisateur
-	message, err := users.Register(ctx, username, password, email, phoneNumber)
+	message, err := register.Register(ctx, username, password, email, phoneNumber)
 	if err != nil {
 		return nil, fmt.Errorf("error registering user: %v", err)
 	}
 
-	user, err := users.Login(ctx, username, password)
+	user, err := login.Login(ctx, username, password)
 	if err != nil {
 		return nil, fmt.Errorf("error logging in: %v", err)
 	}
@@ -49,7 +50,7 @@ func (r *mutationResolver) Register(ctx context.Context, username string, passwo
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, username string, password string) (*model.AuthResponse, error) {
 	// Connexion utilisateur
-	user, err := users.Login(ctx, username, password)
+	user, err := login.Login(ctx, username, password)
 	if err != nil {
 		return nil, fmt.Errorf("error logging in: %v", err)
 	}
@@ -72,34 +73,8 @@ func (r *mutationResolver) Login(ctx context.Context, username string, password 
 	}, nil
 }
 
-// SearchUsers est le résolveur pour la requête `searchUsers`.
 func (r *queryResolver) SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.User, error) {
-	// Définit une limite par défaut si elle n'est pas fournie
-	maxResults := 10
-	if limit != nil {
-		maxResults = *limit
-	}
-
-	// Mock database (tu peux remplacer ceci par une requête à ta vraie base de données)
-	users := []*model.User{
-		{ID: "1", Username: "theophile", Email: "theophile@example.com", CreatedAt: "2023-01-01"},
-		{ID: "2", Username: "theo123", Email: "theo123@example.com", CreatedAt: "2023-01-02"},
-		{ID: "3", Username: "alexandre", Email: "alex@example.com", CreatedAt: "2023-01-03"},
-		{ID: "4", Username: "theresa", Email: "theresa@example.com", CreatedAt: "2023-01-04"},
-	}
-
-	// Recherche les utilisateurs dont le nom commence par `prefix`
-	var results []*model.User
-	for _, user := range users {
-		if strings.HasPrefix(strings.ToLower(user.Username), strings.ToLower(prefix)) {
-			results = append(results, user)
-		}
-		if len(results) >= maxResults {
-			break
-		}
-	}
-
-	return results, nil
+	return search_users.SearchUser(ctx, prefix, limit)
 }
 
 // Mutation returns MutationResolver implementation.

@@ -10,7 +10,7 @@ import (
 	"server/auth"
 	login "server/content/accounts/login"
 	register "server/content/accounts/register"
-	search_users "server/content/social/search_users"
+	search_users "server/content/social"
 	"server/graph/model"
 	"strconv"
 )
@@ -74,10 +74,15 @@ func (r *mutationResolver) Login(ctx context.Context, username string, password 
 }
 
 func (r *queryResolver) SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.User, error) {
+	fmt.Printf("In schema.resolvers.go, func SearchUsers")
 	return search_users.SearchUser(ctx, prefix, limit)
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }

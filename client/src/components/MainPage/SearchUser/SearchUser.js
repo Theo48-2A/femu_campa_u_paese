@@ -26,10 +26,12 @@ function SearchUser() {
         body: JSON.stringify({
           query: `
             query {
-              searchUsers(query: "${query}") {
+              searchUsers(prefix: "${query}", limit: 10) {
                 id
                 username
                 email
+                phoneNumber
+                createdAt
               }
             }
           `,
@@ -38,7 +40,11 @@ function SearchUser() {
 
       if (response.ok) {
         const data = await response.json();
-        setResults(data.data.searchUsers || []);
+        if (data.errors) {
+          setError(data.errors[0]?.message || "Erreur lors de la recherche.");
+        } else {
+          setResults(data.data.searchUsers || []);
+        }
       } else {
         setError("Erreur lors de la recherche. Veuillez réessayer.");
       }
@@ -93,6 +99,8 @@ function SearchUser() {
                   <strong>{user.username}</strong>
                 </p>
                 <p>Email: {user.email}</p>
+                <p>Téléphone: {user.phoneNumber || "Non renseigné"}</p>
+                <p>Date de création: {new Date(user.createdAt).toLocaleString()}</p>
               </div>
             ))
           ) : (

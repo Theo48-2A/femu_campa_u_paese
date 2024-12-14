@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"server/database"
 	"server/graph/model"
+	"time"
 )
 
 func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.User, error) {
+	fmt.Printf("In schema.resolvers.go, func SearchUsers : debut\n")
 	maxResults := 10
 	if limit != nil {
 		maxResults = *limit
@@ -29,11 +31,17 @@ func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.User, 
 	var users []*model.User
 	for rows.Next() {
 		var user model.User
-		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.PhoneNumber, &user.CreatedAt); err != nil {
+		var dbCreatedAt time.Time // Utiliser une variable temporaire pour le timestamp
+
+		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.PhoneNumber, &dbCreatedAt); err != nil {
 			return nil, err
 		}
+
+		// Convertir le timestamp en string (ISO 8601 format)
+		user.CreatedAt = dbCreatedAt.Format(time.RFC3339)
+
 		users = append(users, &user)
 	}
-
+	fmt.Printf("In schema.resolvers.go, func SearchUsers : fin\n")
 	return users, nil
 }

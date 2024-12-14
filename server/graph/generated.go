@@ -62,7 +62,7 @@ type ComplexityRoot struct {
 		SearchUsers func(childComplexity int, prefix string, limit *int) int
 	}
 
-	User struct {
+	UserAccount struct {
 		CreatedAt   func(childComplexity int) int
 		Email       func(childComplexity int) int
 		ID          func(childComplexity int) int
@@ -76,7 +76,7 @@ type MutationResolver interface {
 	Login(ctx context.Context, username string, password string) (*model.AuthResponse, error)
 }
 type QueryResolver interface {
-	SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.User, error)
+	SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error)
 }
 
 type executableSchema struct {
@@ -155,40 +155,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.SearchUsers(childComplexity, args["prefix"].(string), args["limit"].(*int)), true
 
-	case "User.createdAt":
-		if e.complexity.User.CreatedAt == nil {
+	case "UserAccount.createdAt":
+		if e.complexity.UserAccount.CreatedAt == nil {
 			break
 		}
 
-		return e.complexity.User.CreatedAt(childComplexity), true
+		return e.complexity.UserAccount.CreatedAt(childComplexity), true
 
-	case "User.email":
-		if e.complexity.User.Email == nil {
+	case "UserAccount.email":
+		if e.complexity.UserAccount.Email == nil {
 			break
 		}
 
-		return e.complexity.User.Email(childComplexity), true
+		return e.complexity.UserAccount.Email(childComplexity), true
 
-	case "User.id":
-		if e.complexity.User.ID == nil {
+	case "UserAccount.id":
+		if e.complexity.UserAccount.ID == nil {
 			break
 		}
 
-		return e.complexity.User.ID(childComplexity), true
+		return e.complexity.UserAccount.ID(childComplexity), true
 
-	case "User.phoneNumber":
-		if e.complexity.User.PhoneNumber == nil {
+	case "UserAccount.phoneNumber":
+		if e.complexity.UserAccount.PhoneNumber == nil {
 			break
 		}
 
-		return e.complexity.User.PhoneNumber(childComplexity), true
+		return e.complexity.UserAccount.PhoneNumber(childComplexity), true
 
-	case "User.username":
-		if e.complexity.User.Username == nil {
+	case "UserAccount.username":
+		if e.complexity.UserAccount.Username == nil {
 			break
 		}
 
-		return e.complexity.User.Username(childComplexity), true
+		return e.complexity.UserAccount.Username(childComplexity), true
 
 	}
 	return 0, false
@@ -575,9 +575,9 @@ func (ec *executionContext) _AuthResponse_user(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.User)
+	res := resTmp.(*model.UserAccount)
 	fc.Result = res
-	return ec.marshalNUser2ᚖserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuthResponse_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -589,17 +589,17 @@ func (ec *executionContext) fieldContext_AuthResponse_user(_ context.Context, fi
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_User_id(ctx, field)
+				return ec.fieldContext_UserAccount_id(ctx, field)
 			case "username":
-				return ec.fieldContext_User_username(ctx, field)
+				return ec.fieldContext_UserAccount_username(ctx, field)
 			case "email":
-				return ec.fieldContext_User_email(ctx, field)
+				return ec.fieldContext_UserAccount_email(ctx, field)
 			case "phoneNumber":
-				return ec.fieldContext_User_phoneNumber(ctx, field)
+				return ec.fieldContext_UserAccount_phoneNumber(ctx, field)
 			case "createdAt":
-				return ec.fieldContext_User_createdAt(ctx, field)
+				return ec.fieldContext_UserAccount_createdAt(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type UserAccount", field.Name)
 		},
 	}
 	return fc, nil
@@ -842,9 +842,9 @@ func (ec *executionContext) _Query_searchUsers(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.User)
+	res := resTmp.([]*model.UserAccount)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUserAccount2ᚕᚖserverᚋgraphᚋmodelᚐUserAccount(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_searchUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -856,17 +856,17 @@ func (ec *executionContext) fieldContext_Query_searchUsers(ctx context.Context, 
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_User_id(ctx, field)
+				return ec.fieldContext_UserAccount_id(ctx, field)
 			case "username":
-				return ec.fieldContext_User_username(ctx, field)
+				return ec.fieldContext_UserAccount_username(ctx, field)
 			case "email":
-				return ec.fieldContext_User_email(ctx, field)
+				return ec.fieldContext_UserAccount_email(ctx, field)
 			case "phoneNumber":
-				return ec.fieldContext_User_phoneNumber(ctx, field)
+				return ec.fieldContext_UserAccount_phoneNumber(ctx, field)
 			case "createdAt":
-				return ec.fieldContext_User_createdAt(ctx, field)
+				return ec.fieldContext_UserAccount_createdAt(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type UserAccount", field.Name)
 		},
 	}
 	defer func() {
@@ -1012,8 +1012,8 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_id(ctx, field)
+func (ec *executionContext) _UserAccount_id(ctx context.Context, field graphql.CollectedField, obj *model.UserAccount) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccount_id(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1043,9 +1043,9 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserAccount_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "User",
+		Object:     "UserAccount",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1056,8 +1056,8 @@ func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphq
 	return fc, nil
 }
 
-func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_username(ctx, field)
+func (ec *executionContext) _UserAccount_username(ctx context.Context, field graphql.CollectedField, obj *model.UserAccount) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccount_username(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1087,9 +1087,9 @@ func (ec *executionContext) _User_username(ctx context.Context, field graphql.Co
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_User_username(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserAccount_username(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "User",
+		Object:     "UserAccount",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1100,8 +1100,8 @@ func (ec *executionContext) fieldContext_User_username(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_email(ctx, field)
+func (ec *executionContext) _UserAccount_email(ctx context.Context, field graphql.CollectedField, obj *model.UserAccount) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccount_email(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1131,9 +1131,9 @@ func (ec *executionContext) _User_email(ctx context.Context, field graphql.Colle
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_User_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserAccount_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "User",
+		Object:     "UserAccount",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1144,8 +1144,8 @@ func (ec *executionContext) fieldContext_User_email(_ context.Context, field gra
 	return fc, nil
 }
 
-func (ec *executionContext) _User_phoneNumber(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_phoneNumber(ctx, field)
+func (ec *executionContext) _UserAccount_phoneNumber(ctx context.Context, field graphql.CollectedField, obj *model.UserAccount) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccount_phoneNumber(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1172,9 +1172,9 @@ func (ec *executionContext) _User_phoneNumber(ctx context.Context, field graphql
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_User_phoneNumber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserAccount_phoneNumber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "User",
+		Object:     "UserAccount",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -1185,8 +1185,8 @@ func (ec *executionContext) fieldContext_User_phoneNumber(_ context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_createdAt(ctx, field)
+func (ec *executionContext) _UserAccount_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.UserAccount) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccount_createdAt(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1216,9 +1216,9 @@ func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.C
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_User_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserAccount_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "User",
+		Object:     "UserAccount",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3184,36 +3184,36 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var userImplementors = []string{"User"}
+var userAccountImplementors = []string{"UserAccount"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
+func (ec *executionContext) _UserAccount(ctx context.Context, sel ast.SelectionSet, obj *model.UserAccount) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userAccountImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("User")
+			out.Values[i] = graphql.MarshalString("UserAccount")
 		case "id":
-			out.Values[i] = ec._User_id(ctx, field, obj)
+			out.Values[i] = ec._UserAccount_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "username":
-			out.Values[i] = ec._User_username(ctx, field, obj)
+			out.Values[i] = ec._UserAccount_username(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "email":
-			out.Values[i] = ec._User_email(ctx, field, obj)
+			out.Values[i] = ec._UserAccount_email(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		case "phoneNumber":
-			out.Values[i] = ec._User_phoneNumber(ctx, field, obj)
+			out.Values[i] = ec._UserAccount_phoneNumber(ctx, field, obj)
 		case "createdAt":
-			out.Values[i] = ec._User_createdAt(ctx, field, obj)
+			out.Values[i] = ec._UserAccount_createdAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -3625,7 +3625,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUserAccount2ᚕᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v []*model.UserAccount) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3649,7 +3649,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖserverᚋgraphᚋmodelᚐUser(ctx
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUser2ᚖserverᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3663,14 +3663,14 @@ func (ec *executionContext) marshalNUser2ᚕᚖserverᚋgraphᚋmodelᚐUser(ctx
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._User(ctx, sel, v)
+	return ec._UserAccount(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -3984,11 +3984,11 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOUser2ᚖserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._User(ctx, sel, v)
+	return ec._UserAccount(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

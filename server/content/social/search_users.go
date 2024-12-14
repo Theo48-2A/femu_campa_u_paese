@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.User, error) {
+func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error) {
 	fmt.Printf("In schema.resolvers.go, func SearchUsers : debut\n")
 	maxResults := 10
 	if limit != nil {
@@ -17,7 +17,7 @@ func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.User, 
 
 	query := `
         SELECT id, username, email, phone_number, created_at
-        FROM users
+        FROM user_account
         WHERE LOWER(username) LIKE $1
         LIMIT $2;
     `
@@ -28,9 +28,9 @@ func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.User, 
 	}
 	defer rows.Close()
 
-	var users []*model.User
+	var users []*model.UserAccount
 	for rows.Next() {
-		var user model.User
+		var user model.UserAccount
 		var dbCreatedAt time.Time // Utiliser une variable temporaire pour le timestamp
 
 		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.PhoneNumber, &dbCreatedAt); err != nil {

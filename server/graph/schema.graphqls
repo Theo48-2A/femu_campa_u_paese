@@ -1,4 +1,4 @@
-type User {
+type UserAccount {
   id: ID!
   username: String!
   email: String!
@@ -7,7 +7,7 @@ type User {
 }
 
 type AuthResponse {
-  user: User!
+  user: UserAccount!
   token: String!
   message : String
 }
@@ -18,5 +18,5 @@ type Mutation {
 }
 
 type Query {
-  searchUsers(prefix: String!, limit: Int = 10): [User]!
+  searchUsers(prefix: String!, limit: Int = 10): [UserAccount]!
 }

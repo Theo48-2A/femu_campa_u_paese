@@ -11,13 +11,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(ctx context.Context, username, password string) (*model.User, error) {
+func Login(ctx context.Context, username, password string) (*model.UserAccount, error) {
 	// Debug log pour suivre le processus
 	log.Printf("Attempting login for username: %s", username)
 
 	// Récupération des informations utilisateur
-	query := `SELECT id, password_hash, email, phone_number, created_at FROM users WHERE username=$1`
-	var user model.User
+	query := `SELECT id, password_hash, email, phone_number, created_at FROM user_account WHERE username=$1`
+	var user model.UserAccount
 	var hashedPassword string
 	var dbCreatedAt time.Time
 

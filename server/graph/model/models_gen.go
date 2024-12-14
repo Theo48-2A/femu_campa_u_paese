@@ -3,9 +3,9 @@
 package model
 
 type AuthResponse struct {
-	User    *User   `json:"user"`
-	Token   string  `json:"token"`
-	Message *string `json:"message,omitempty"`
+	User    *UserAccount `json:"user"`
+	Token   string       `json:"token"`
+	Message *string      `json:"message,omitempty"`
 }
 
 type Mutation struct {
@@ -14,7 +14,7 @@ type Mutation struct {
 type Query struct {
 }
 
-type User struct {
+type UserAccount struct {
 	ID          string  `json:"id"`
 	Username    string  `json:"username"`
 	Email       string  `json:"email"`

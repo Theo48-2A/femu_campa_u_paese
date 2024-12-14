@@ -73,7 +73,7 @@ func (r *mutationResolver) Login(ctx context.Context, username string, password 
 	}, nil
 }
 
-func (r *queryResolver) SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.User, error) {
+func (r *queryResolver) SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error) {
 	fmt.Printf("In schema.resolvers.go, func SearchUsers")
 	return search_users.SearchUser(ctx, prefix, limit)
 }

@@ -18,7 +18,7 @@ func Register(ctx context.Context, username, password, email string, phoneNumber
 	}
 
 	// Insertion dans la base de données
-	query := `INSERT INTO users (username, password_hash, email, phone_number) VALUES ($1, $2, $3, $4) RETURNING id`
+	query := `INSERT INTO user_account (username, password_hash, email, phone_number) VALUES ($1, $2, $3, $4) RETURNING id`
 	var userID int
 	err = database.DB.QueryRow(ctx, query, username, hashedPassword, email, phoneNumber).Scan(&userID)
 	if err != nil {

@@ -15,7 +15,9 @@
 
 /* Header stylisé */
 .header {
-  background-color: #007bff;
+  background-image: url("/app/public/images/test.jpg");
+  background-size: cover; /* L'image couvre toute la surface */
+  background-repeat: no-repeat; /* Empêche la répétition */
   color: white;
   padding: 10px 20px;
   display: flex;

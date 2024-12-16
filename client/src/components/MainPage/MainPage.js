@@ -8,27 +8,21 @@ import Sidebar from "./Sidebar/Sidebar"; // Inclure la barre de navigation
 function MainPage() {
   const { user, logout } = useUser();
   const navigate = useNavigate();
-  const [showAccountInfo, setShowAccountInfo] = useState(false);
+  const [showAccountInfo] = useState(false);
 
   if (!user) {
     navigate("/");
     return null;
   }
 
-  const toggleAccountInfo = () => {
-    setShowAccountInfo(!showAccountInfo);
-  };
 
   return (
     <div className="main-container">
       <Sidebar />
       <div className="main-content">
         <header className="header">
-          <h1>Bienvenue sur l'application</h1>
+          <h1> </h1>
           <div className="header-actions">
-            <button onClick={toggleAccountInfo} className="info-button">
-              🟦
-            </button>
             <button onClick={logout} className="logout-button">
               ⬅
             </button>

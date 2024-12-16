@@ -5,7 +5,7 @@ import Login from "./components/HomePage/Login/Login";
 import Register from "./components/HomePage/Register/Register";
 import MainPage from "./components/MainPage/MainPage";
 import ProfilePage from "./components/MainPage/ProfilePage/ProfilePage";
-import SearchUser from "./components/MainPage/SearchUser/SearchUser";
+import SearchBar from "./components/MainPage/SearchBar/SearchBar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/search-user" element={<SearchUser />} />
+          <Route path="/search-bar" element={<SearchBar />} />
         </Routes>
       </Router>
     </UserProvider>

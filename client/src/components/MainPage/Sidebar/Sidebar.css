@@ -1,26 +1,48 @@
+/* Conteneur principal */
+.sidebar-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar principale */
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 15%;
-    background-color: #fff;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
+  width: 250px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-item {
+  padding: 12px 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.sidebar-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Deuxième sidebar (search bar) */
+.search-sidebar {
+  width: 300px;
+  background-color: #f9f9f9;
+  border-left: 1px solid #ddd;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Animation pour faire glisser la search bar */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
   }
-  
-  .sidebar-item {
-    margin: 20px 0;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
+  to {
+    transform: translateX(0);
   }
-  
-  .sidebar-item:hover {
-    color: #3498db;
-    transform: scale(1.1);
-  }
-  
+}

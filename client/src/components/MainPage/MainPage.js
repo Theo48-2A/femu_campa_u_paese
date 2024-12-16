@@ -22,35 +22,38 @@ function MainPage() {
   return (
     <div className="main-container">
       <Sidebar />
-      <header className="header">
-        <h1>Bienvenue sur l'application</h1>
-        <div className="header-actions">
-          <button onClick={toggleAccountInfo} className="info-button">
-            🟦
-          </button>
-          <button onClick={logout} className="logout-button">
-            ⬅
-          </button>
-        </div>
-      </header>
-      <main className="content">
-        <p>Bienvenue dans votre tableau de bord, {user.user.username || "Utilisateur"} !</p>
-        {showAccountInfo && (
-          <div className="account-info">
-          <h3>Informations du compte</h3>
-          <p>Email : {user.user.email}</p>
-          <p>Téléphone : {user.user.phoneNumber}</p>
-          <button
-            onClick={() => navigate("/profile")}
-            className="profile-button"
-          >
-            Voir le profil
-          </button>
-        </div>
-        )}
-      </main>
+      <div className="main-content">
+        <header className="header">
+          <h1>Bienvenue sur l'application</h1>
+          <div className="header-actions">
+            <button onClick={toggleAccountInfo} className="info-button">
+              🟦
+            </button>
+            <button onClick={logout} className="logout-button">
+              ⬅
+            </button>
+          </div>
+        </header>
+        <main className="content">
+          <p>Bienvenue dans votre tableau de bord, {user.user.username || "Utilisateur"} !</p>
+          {showAccountInfo && (
+            <div className="account-info">
+              <h3>Informations du compte</h3>
+              <p>Email : {user.user.email}</p>
+              <p>Téléphone : {user.user.phoneNumber}</p>
+              <button
+                onClick={() => navigate("/profile")}
+                className="profile-button"
+              >
+                Voir le profil
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
+  
 }
 
 export default MainPage;

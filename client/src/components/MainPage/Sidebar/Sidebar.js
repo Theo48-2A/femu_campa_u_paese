@@ -1,21 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Sidebar.css"; // Ajouter le CSS pour la barre
+import SearchBar from "../SearchBar/SearchBar";
+import "./Sidebar.css";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const [showSearch, setShowSearch] = useState(false);
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-item" onClick={() => navigate("/main")}>
-        🏠 Accueil
+    <div className="sidebar-container">
+      {/* Sidebar principale */}
+      <div className="sidebar">
+        <div className="sidebar-item" onClick={() => navigate("/main")}>
+          🏠 Accueil
+        </div>
+        <div className="sidebar-item" onClick={() => setShowSearch(!showSearch)}>
+          🔍 Rechercher
+        </div>
+        <div className="sidebar-item" onClick={() => navigate("/profile")}>
+          👤 Profil
+        </div>
       </div>
-      <div className="sidebar-item" onClick={() => navigate("/search-user")}>
-        🔍 Rechercher
-      </div>
-      <div className="sidebar-item" onClick={() => navigate("/profile")}>
-        👤 Profil
-      </div>
+
+      {/* Deuxième sidebar (recherche) */}
+      {showSearch && (
+        <div className="search-sidebar">
+          <SearchBar />
+        </div>
+      )}
     </div>
   );
 }

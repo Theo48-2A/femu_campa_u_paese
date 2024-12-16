@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"server/database"
 	"server/graph/model"
-	"time"
 )
 
 func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error) {
@@ -15,8 +14,9 @@ func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserAc
 		maxResults = *limit
 	}
 
+	// Requête SQL ne récupérant que id et username
 	query := `
-        SELECT id, username, email, phone_number, created_at
+        SELECT id, username
         FROM user_account
         WHERE LOWER(username) LIKE $1
         LIMIT $2;
@@ -28,17 +28,15 @@ func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserAc
 	}
 	defer rows.Close()
 
+	// Préparation d'un tableau pour stocker les résultats
 	var users []*model.UserAccount
 	for rows.Next() {
 		var user model.UserAccount
-		var dbCreatedAt time.Time // Utiliser une variable temporaire pour le timestamp
 
-		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.PhoneNumber, &dbCreatedAt); err != nil {
+		// Récupération des champs id et username uniquement
+		if err := rows.Scan(&user.ID, &user.Username); err != nil {
 			return nil, err
 		}
-
-		// Convertir le timestamp en string (ISO 8601 format)
-		user.CreatedAt = dbCreatedAt.Format(time.RFC3339)
 
 		users = append(users, &user)
 	}

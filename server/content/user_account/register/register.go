@@ -34,6 +34,7 @@ func Register(ctx context.Context, username, password, email string, phoneNumber
 	}
 
 	// Étape 2: Création d'un profil vide ou par défaut dans user_profile
+	// exemple attendu : avatar_1
 	defaultAvatarURL := "" // URL exposée par le serveur
 	queryProfile := `INSERT INTO user_profile (user_account_id, description, avatar_url) 
 	                 VALUES ($1, $2, $3)`

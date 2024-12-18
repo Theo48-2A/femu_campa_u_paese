@@ -29,7 +29,7 @@ function Sidebar() {
         <div className="sidebar-item" onClick={() => setShowSearch(!showSearch)}>
           🔍 Rechercher
         </div>
-        <div className="sidebar-item" onClick={() => navigate("/profile")}>
+        <div className="sidebar-item" onClick={() => navigate("/my-profile")}>
           👤 Profil
         </div>
         <div className="sidebar-item" onClick={toggleAccountInfo}>
@@ -51,8 +51,11 @@ function Sidebar() {
       {showAccountInfo && user && (
         <div className="account-info">
           <h3>Informations du compte</h3>
+          <p>username : {user.user.username}</p>
+          <p>Téléphone : {user.user.token}</p>
           <p>Email : {user.user.email}</p>
           <p>Téléphone : {user.user.phoneNumber}</p>
+          <p>CreatedAt : {user.user.createdAt}</p>
           <button
             onClick={() => navigate("/profile")}
             className="profile-button"

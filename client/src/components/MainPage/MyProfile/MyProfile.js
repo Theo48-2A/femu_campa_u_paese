@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import "./UserProfile.css";
+import "./MyProfile.css";
 import Sidebar from "../Sidebar/Sidebar"; // Inclure la barre de navigation
 
-
-function UserProfile() {
-  const { userID } = useParams();
+function MyProfile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,24 +10,29 @@ function UserProfile() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+      const id = localStorage.getItem("id"); // Récupère le token d'authentification
+      const token = localStorage.getItem("token"); // Récupère le token d'authentification
+
       setLoading(true);
       setError(null);
 
       try {
         const response = await fetch(`${apiUrl}/query`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Envoie le token au serveur
+          },
           body: JSON.stringify({
             query: `
-              query GetUserProfile($userId: ID!) {
-                getUserProfile(userId: $userId) {
+              query GetAuthenticatedUserProfile {
+                getAuthenticatedUserProfile {
                   username
                   description
                   avatarUrl
                 }
               }
             `,
-            variables: { userId: userID },
           }),
         });
 
@@ -44,17 +46,17 @@ function UserProfile() {
           throw new Error(errors[0].message || "Erreur inconnue");
         }
 
-        setProfile(data.getUserProfile);
+        setProfile(data.getAuthenticatedUserProfile);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
-        setError("Impossible de charger le profil utilisateur.");
+        setError("Impossible de charger votre profil.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserProfile();
-  }, [userID]);
+  }, []);
 
   if (loading) {
     return <div className="loading-spinner">Chargement...</div>;
@@ -65,7 +67,7 @@ function UserProfile() {
   }
 
   if (!profile) {
-    return <div>Utilisateur introuvable.</div>;
+    return <div>Profil introuvable.</div>;
   }
 
   return (
@@ -86,4 +88,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default MyProfile;

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SearchBar.css";
 
 function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSearch = useCallback(async () => {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
@@ -54,6 +56,11 @@ function SearchBar() {
     setResults([]);
   };
 
+  // Fonction pour naviguer vers le profil utilisateur
+  const handleUserClick = (id) => {
+    navigate(`/user/${id}`); // Redirection vers la page de profil avec l'ID
+  };
+
   return (
     <div className="search-bar">
       <div className="search-input-container">
@@ -73,7 +80,11 @@ function SearchBar() {
       </div>
       <div className="search-results">
         {results.map((user) => (
-          <div key={user.id} className="search-result-item">
+          <div
+            key={user.id}
+            className="search-result-item"
+            onClick={() => handleUserClick(user.id)} // Redirection au clic
+          >
             {user.username}
           </div>
         ))}

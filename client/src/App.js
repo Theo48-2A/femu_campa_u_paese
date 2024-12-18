@@ -6,6 +6,7 @@ import Register from "./components/HomePage/Register/Register";
 import MainPage from "./components/MainPage/MainPage";
 import ProfilePage from "./components/MainPage/ProfilePage/ProfilePage";
 import SearchBar from "./components/MainPage/SearchBar/SearchBar";
+import UserProfile from "./components/MainPage/UserProfile/UserProfile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search-bar" element={<SearchBar />} />
+          <Route path="/user/:userID" element={<UserProfile />} />
         </Routes>
       </Router>
     </UserProvider>

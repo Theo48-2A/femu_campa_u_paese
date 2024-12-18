@@ -4,19 +4,30 @@ type UserAccount {
   email: String!
   phoneNumber: String
   createdAt: String!
+  profile: UserProfile  
 }
+
+type UserProfile {
+  id: ID!
+  description: String
+  avatarUrl: String
+  username: String!
+}
+
 
 type AuthResponse {
   user: UserAccount!
   token: String!
-  message : String
+  message: String
 }
 
 type Mutation {
   register(username: String!, password: String!, email: String!, phoneNumber: String): AuthResponse!
   login(username: String!, password: String!): AuthResponse!
+  updateProfile(description: String, avatarUrl: String): UserProfile! 
 }
 
 type Query {
   searchUsers(prefix: String!, limit: Int = 10): [UserAccount]!
+  getUserProfile(userId: ID!): UserProfile! 
 }

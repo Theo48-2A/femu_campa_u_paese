@@ -54,9 +54,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		Login         func(childComplexity int, username string, password string) int
-		Register      func(childComplexity int, username string, password string, email string, phoneNumber *string) int
-		UpdateProfile func(childComplexity int, description *string, avatarURL *string) int
+		Login                   func(childComplexity int, username string, password string) int
+		Register                func(childComplexity int, username string, password string, email string, phoneNumber *string) int
+		UpdateProfilDescription func(childComplexity int, description *string) int
 	}
 
 	Query struct {
@@ -84,7 +84,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error)
 	Login(ctx context.Context, username string, password string) (*model.AuthResponse, error)
-	UpdateProfile(ctx context.Context, description *string, avatarURL *string) (*model.UserProfile, error)
+	UpdateProfilDescription(ctx context.Context, description *string) (*model.UserProfile, error)
 }
 type QueryResolver interface {
 	SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error)
@@ -155,17 +155,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.Register(childComplexity, args["username"].(string), args["password"].(string), args["email"].(string), args["phoneNumber"].(*string)), true
 
-	case "Mutation.updateProfile":
-		if e.complexity.Mutation.UpdateProfile == nil {
+	case "Mutation.updateProfilDescription":
+		if e.complexity.Mutation.UpdateProfilDescription == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_updateProfile_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_updateProfilDescription_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateProfile(childComplexity, args["description"].(*string), args["avatarUrl"].(*string)), true
+		return e.complexity.Mutation.UpdateProfilDescription(childComplexity, args["description"].(*string)), true
 
 	case "Query.getUserProfile":
 		if e.complexity.Query.GetUserProfile == nil {
@@ -502,40 +502,22 @@ func (ec *executionContext) field_Mutation_register_argsPhoneNumber(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Mutation_updateProfile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_updateProfilDescription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Mutation_updateProfile_argsDescription(ctx, rawArgs)
+	arg0, err := ec.field_Mutation_updateProfilDescription_argsDescription(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
 	args["description"] = arg0
-	arg1, err := ec.field_Mutation_updateProfile_argsAvatarURL(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["avatarUrl"] = arg1
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_updateProfile_argsDescription(
+func (ec *executionContext) field_Mutation_updateProfilDescription_argsDescription(
 	ctx context.Context,
 	rawArgs map[string]interface{},
 ) (*string, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
 	if tmp, ok := rawArgs["description"]; ok {
-		return ec.unmarshalOString2ᚖstring(ctx, tmp)
-	}
-
-	var zeroVal *string
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateProfile_argsAvatarURL(
-	ctx context.Context,
-	rawArgs map[string]interface{},
-) (*string, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("avatarUrl"))
-	if tmp, ok := rawArgs["avatarUrl"]; ok {
 		return ec.unmarshalOString2ᚖstring(ctx, tmp)
 	}
 
@@ -953,8 +935,8 @@ func (ec *executionContext) fieldContext_Mutation_login(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateProfile(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updateProfile(ctx, field)
+func (ec *executionContext) _Mutation_updateProfilDescription(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateProfilDescription(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -967,7 +949,7 @@ func (ec *executionContext) _Mutation_updateProfile(ctx context.Context, field g
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateProfile(rctx, fc.Args["description"].(*string), fc.Args["avatarUrl"].(*string))
+		return ec.resolvers.Mutation().UpdateProfilDescription(rctx, fc.Args["description"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -984,7 +966,7 @@ func (ec *executionContext) _Mutation_updateProfile(ctx context.Context, field g
 	return ec.marshalNUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_updateProfile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_updateProfilDescription(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -1011,7 +993,7 @@ func (ec *executionContext) fieldContext_Mutation_updateProfile(ctx context.Cont
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateProfile_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_updateProfilDescription_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3579,9 +3561,9 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "updateProfile":
+		case "updateProfilDescription":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateProfile(ctx, field)
+				return ec._Mutation_updateProfilDescription(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

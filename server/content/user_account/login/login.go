@@ -16,13 +16,14 @@ func Login(ctx context.Context, username, password string) (*model.UserAccount, 
 	log.Printf("Attempting login for username: %s", username)
 
 	// Récupération des informations utilisateur
-	query := `SELECT id, password_hash, email, phone_number, created_at FROM user_account WHERE username=$1`
+	query := `SELECT id, username, password_hash, email, phone_number, created_at FROM user_account WHERE username=$1`
 	var user model.UserAccount
 	var hashedPassword string
 	var dbCreatedAt time.Time
 
 	err := database.DB.QueryRow(ctx, query, username).Scan(
 		&user.ID,
+		&user.Username, // Ajout du scan du champ username
 		&hashedPassword,
 		&user.Email,
 		&user.PhoneNumber,

@@ -4,14 +4,18 @@ import { useUser } from "../../../utils/UserContext";
 import SearchBar from "../SearchBar/SearchBar";
 import "./Sidebar.css";
 
-function Sidebar() {
+const Sidebar = () => {
   const navigate = useNavigate();
-  const { user, logout } = useUser();
+  const { logout } = useUser();
   const [showSearch, setShowSearch] = useState(false);
   const [showAccountInfo, setShowAccountInfo] = useState(false);
 
+  // Charger l'utilisateur depuis le localStorage
+  const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+
   const handleLogout = () => {
     logout(); // Appelle la fonction de déconnexion
+    localStorage.removeItem("user"); // Supprime les données du localStorage
     navigate("/"); // Redirige vers la page d'accueil
   };
 
@@ -48,14 +52,14 @@ function Sidebar() {
       )}
 
       {/* Informations du compte */}
-      {showAccountInfo && user && (
+      {showAccountInfo && userFromLocalStorage && (
         <div className="account-info">
           <h3>Informations du compte</h3>
-          <p>username : {user.user.username}</p>
-          <p>Téléphone : {user.user.token}</p>
-          <p>Email : {user.user.email}</p>
-          <p>Téléphone : {user.user.phoneNumber}</p>
-          <p>CreatedAt : {user.user.createdAt}</p>
+          <p>id : {userFromLocalStorage.id}</p>
+          <p>username : {userFromLocalStorage.username}</p>
+          <p>Email : {userFromLocalStorage.email}</p>
+          <p>Téléphone : {userFromLocalStorage.phoneNumber}</p>
+          <p>CreatedAt : {userFromLocalStorage.createdAt}</p>
           <button
             onClick={() => navigate("/profile")}
             className="profile-button"
@@ -66,6 +70,8 @@ function Sidebar() {
       )}
     </div>
   );
-}
+};
 
 export default Sidebar;
+
+

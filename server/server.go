@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"server/database"
 	"server/graph"
 	"strings"
@@ -34,12 +36,12 @@ func main() {
 	// Endpoint REST pour servir l'avatar
 	http.Handle("/api/user/", enableCORS(http.HandlerFunc(userAvatarHandler)))
 
+	// Endpoint REST pour mettre à jour l'avatar
+	http.Handle("/api/upload-avatar", enableCORS(http.HandlerFunc(uploadAvatarHandler)))
+
 	printCurrentDirectory()
 
 	log.Printf("Connect to http://localhost:%s/ for GraphQL playground", port)
-	//log.Printf("Try an image: http://localhost:%s/api/user/12345/profile-picture", port)
-
-	// Ecoute sur 0.0.0.0 pour docker
 	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, nil))
 }
 
@@ -71,6 +73,69 @@ func userAvatarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.NotFound(w, r)
+}
+
+func uploadAvatarHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Limiter la taille de la requête
+	r.Body = http.MaxBytesReader(w, r.Body, 10<<20) // 10 MB
+
+	// Parse la requête multipart/form-data
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(w, "Requête invalide", http.StatusBadRequest)
+		return
+	}
+
+	// Récupérer le fichier
+	file, handler, err := r.FormFile("avatar")
+	if err != nil {
+		http.Error(w, "Erreur lors de la récupération du fichier", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Récupérer l'ID utilisateur
+	userID := r.FormValue("userID")
+	if userID == "" {
+		http.Error(w, "L'ID utilisateur est requis", http.StatusBadRequest)
+		return
+	}
+
+	// Déterminer le chemin de sauvegarde
+	uploadDir := "./uploads"
+	os.MkdirAll(uploadDir, os.ModePerm)
+	filePath := filepath.Join(uploadDir, fmt.Sprintf("avatar_%s%s", userID, filepath.Ext(handler.Filename)))
+
+	// Sauvegarder le fichier sur le serveur
+	dest, err := os.Create(filePath)
+	if err != nil {
+		http.Error(w, "Erreur lors de la sauvegarde du fichier", http.StatusInternalServerError)
+		return
+	}
+	defer dest.Close()
+
+	_, err = io.Copy(dest, file)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'enregistrement du fichier", http.StatusInternalServerError)
+		return
+	}
+
+	// Mettre à jour l'URL de l'avatar dans la base de données
+	avatarURL := fmt.Sprintf("/api/user/%s/profile-picture", userID)
+	query := `UPDATE user_profile SET avatar_url = $1 WHERE user_account_id = $2`
+	_, err = database.DB.Exec(r.Context(), query, avatarURL, userID)
+	if err != nil {
+		http.Error(w, "Erreur lors de la mise à jour de la base de données", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "Avatar mis à jour avec succès : %s", avatarURL)
 }
 
 func printCurrentDirectory() {

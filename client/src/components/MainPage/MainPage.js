@@ -29,12 +29,12 @@ function MainPage() {
           </div>
         </header>
         <main className="content">
-          <p>Bienvenue dans votre tableau de bord, {user.user.username || "Utilisateur"} !</p>
+          <p>Bienvenue dans votre tableau de bord, {user.username || "Utilisateur"} !</p>
           {showAccountInfo && (
             <div className="account-info">
               <h3>Informations du compte</h3>
-              <p>Email : {user.user.email}</p>
-              <p>Téléphone : {user.user.phoneNumber}</p>
+              <p>Email : {user.email}</p>
+              <p>Téléphone : {user.phoneNumber}</p>
               <button
                 onClick={() => navigate("/profile")}
                 className="profile-button"

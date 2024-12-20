@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"server/database"
 	"server/graph"
@@ -53,23 +54,27 @@ func userAvatarHandler(w http.ResponseWriter, r *http.Request) {
 	if len(parts) == 2 && parts[1] == "profile-picture" {
 		userID := parts[0]
 
-		var imageName string
 		if userID == "default" {
 			// Avatar par défaut si l'utilisateur n'en a pas
-			imageName = "default.jpg"
+			imagePath := "./uploads/default.jpg"
+			if _, err := os.Stat(imagePath); os.IsNotExist(err) {
+				http.NotFound(w, r)
+				return
+			}
+			http.ServeFile(w, r, imagePath)
+			return
 		} else {
-			imageName = "avatar_" + userID + ".jpg"
-		}
-
-		imagePath := "./uploads/" + imageName
-
-		if _, err := os.Stat(imagePath); os.IsNotExist(err) {
-			http.NotFound(w, r)
+			// On cherche un fichier qui matche avatar_userID.*
+			pattern := fmt.Sprintf("avatar_%s.*", userID)
+			matches, err := filepath.Glob(filepath.Join("./uploads", pattern))
+			if err != nil || len(matches) == 0 {
+				http.NotFound(w, r)
+				return
+			}
+			// Servir le premier match (il ne doit y en avoir qu'un)
+			http.ServeFile(w, r, matches[0])
 			return
 		}
-
-		http.ServeFile(w, r, imagePath)
-		return
 	}
 
 	http.NotFound(w, r)
@@ -106,10 +111,33 @@ func uploadAvatarHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Déterminer le chemin de sauvegarde
+	// Déterminer le type de fichier à partir de l'extension du nom de fichier envoyé
+	ext := strings.ToLower(path.Ext(handler.Filename))
+	if ext == "" {
+		http.Error(w, "Impossible de déterminer l'extension du fichier", http.StatusBadRequest)
+		return
+	}
+
+	// Vérifier le type MIME dans le header pour plus de sécurité (facultatif)
+	contentType := handler.Header.Get("Content-Type")
+	if !strings.HasPrefix(contentType, "image/") {
+		http.Error(w, "Le fichier envoyé n'est pas une image", http.StatusBadRequest)
+		return
+	}
+
+	// Nettoyer les anciens avatars de l'utilisateur (un seul avatar autorisé)
 	uploadDir := "./uploads"
+	pattern := fmt.Sprintf("avatar_%s.*", userID)
+	oldFiles, err := filepath.Glob(filepath.Join(uploadDir, pattern))
+	if err == nil {
+		for _, oldFile := range oldFiles {
+			os.Remove(oldFile)
+		}
+	}
+
+	// Déterminer le chemin de sauvegarde
 	os.MkdirAll(uploadDir, os.ModePerm)
-	filePath := filepath.Join(uploadDir, fmt.Sprintf("avatar_%s%s", userID, filepath.Ext(handler.Filename)))
+	filePath := filepath.Join(uploadDir, fmt.Sprintf("avatar_%s%s", userID, ext))
 
 	// Sauvegarder le fichier sur le serveur
 	dest, err := os.Create(filePath)

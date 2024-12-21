@@ -1,16 +1,29 @@
-/* Conteneur principal pour le profil */
-.profile-header {
+/* Conteneur global qui inclut la sidebar + le bloc de profil */
+.user-profile-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ------- "Card" du profil ------- */
+.profile-card {
+  /* On centre la carte dans l’espace dispo (après la sidebar) */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  gap: 10px; /* Espacement entre les éléments */
+
+  margin: 20px;                /* un peu de marge autour */
+  background-color: #ffffff;   /* fond blanc */
+  border-radius: 8px;          /* bords arrondis */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  padding: 30px;
 }
 
-/* Avatar */
+/* ------- AVATAR ------- */
 .avatar-container {
   position: relative;
+  margin-bottom: 15px; /* espace sous l’avatar */
 }
 
 .profile-avatar {
@@ -18,75 +31,88 @@
   height: 150px;
   border-radius: 50%;
   border: 3px solid #ddd;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover; /* pour que l’avatar occupe bien le cercle */
 }
 
+/* Bouton/label pour changer l’avatar */
 .avatar-change-icon {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  background-color: white;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 50%;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease;
 }
 
 .avatar-change-icon:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-/* Nom d'utilisateur */
+.avatar-error {
+  color: #c00;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ------- NOM D’UTILISATEUR ------- */
 .profile-username {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: bold;
   color: #333;
+  margin: 10px 0;
 }
 
-/* Description */
+/* ------- DESCRIPTION ------- */
 .description-container {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px; /* espace entre la description et l’icône/bouton */
+  margin: 10px 0;
 }
 
+/* Texte de description affiché */
 .profile-description {
   font-size: 1rem;
   color: #555;
   margin: 0;
 }
 
+/* Bouton pour éditer la description */
 .edit-description-icon {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #777;
+  color: #888;
   transition: color 0.3s ease;
 }
 
 .edit-description-icon:hover {
-  color: #333;
+  color: #444;
 }
 
-/* Input pour éditer */
+/* Champ texte pour éditer la description */
 .description-input {
   font-size: 1rem;
-  padding: 5px;
+  padding: 6px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  width: 200px;
+  min-width: 220px;
 }
 
+/* Bouton de sauvegarde */
 .save-description-button {
   background-color: #4caf50;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 4px;
+  padding: 6px 10px;
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -94,4 +120,20 @@
 
 .save-description-button:hover {
   background-color: #388e3c;
+}
+
+/* Erreur sur la description */
+.description-error {
+  color: #c00;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ------- SPINNER & MESSAGES D’ERREUR GLOBAUX ------- */
+.loading-spinner,
+.error-message {
+  text-align: center;
+  margin-top: 40px;
+  width: 100%;
 }

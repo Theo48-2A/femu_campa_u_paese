@@ -58,6 +58,7 @@ function MyProfile() {
           throw new Error(errors[0].message || "Erreur inconnue");
         }
 
+        // Forcer le rafraîchissement du cache
         const avatarUrlWithCacheBuster = `${data.getUserProfile.avatarUrl}?cachebuster=${Date.now()}`;
 
         setProfile({
@@ -87,10 +88,7 @@ function MyProfile() {
 
     const { token, id } = storedUser;
     const file = event.target.files[0];
-
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     setUploading(true);
     setAvatarError(null);
@@ -112,8 +110,9 @@ function MyProfile() {
         throw new Error(`Échec du téléchargement : ${response.status}`);
       }
 
-      setProfile((prevProfile) => ({
-        ...prevProfile,
+      // Met à jour la photo avec un paramètre timestamp pour éviter le cache
+      setProfile((prev) => ({
+        ...prev,
         avatarUrl: `${apiUrl}/api/user/${id}/profile-picture?timestamp=${Date.now()}`,
       }));
     } catch (error) {
@@ -167,13 +166,12 @@ function MyProfile() {
       }
 
       const { data, errors } = await response.json();
-
       if (errors) {
         throw new Error(errors[0].message || "Erreur inconnue");
       }
 
-      setProfile((prevProfile) => ({
-        ...prevProfile,
+      setProfile((prev) => ({
+        ...prev,
         description: data.updateProfilDescription.description,
       }));
       setError(null);
@@ -201,7 +199,9 @@ function MyProfile() {
   return (
     <div className="user-profile-container">
       <Sidebar />
-      <div className="profile-header">
+
+      {/* Le contenu “carte de profil” */}
+      <div className="profile-card">
         <div className="avatar-container">
           <img
             src={profile.avatarUrl || "https://via.placeholder.com/150"}
@@ -209,7 +209,7 @@ function MyProfile() {
             className="profile-avatar"
           />
           <label className="avatar-change-icon">
-            📷
+            <i className="fa-solid fa-camera"></i>
             <input
               type="file"
               accept="image/*"
@@ -220,12 +220,13 @@ function MyProfile() {
           </label>
           {avatarError && <p className="avatar-error">{avatarError}</p>}
         </div>
-        <div className="username-container">
-          <h1 className="profile-username">
-            {profile.username || "Utilisateur inconnu"}
-          </h1>
-        </div>
+
+        <h1 className="profile-username">
+          {profile.username || "Utilisateur inconnu"}
+        </h1>
+
         <div className="description-container">
+          {/* Si on n’est pas en train de modifier la description */}
           {!updatingDescription ? (
             <>
               <p className="profile-description">
@@ -236,10 +237,11 @@ function MyProfile() {
                 onClick={() => setUpdatingDescription(true)}
                 aria-label="Modifier la description"
               >
-                ✏️
+                <i className="fa-solid fa-pen-to-square"></i>
               </button>
             </>
           ) : (
+            // Sinon, champ de texte + bouton de sauvegarde
             <>
               <input
                 type="text"
@@ -253,14 +255,15 @@ function MyProfile() {
                 onClick={handleDescriptionUpdate}
                 disabled={!newDescription.trim()}
               >
-                ✅
+                <i className="fa-solid fa-check"></i>
               </button>
             </>
           )}
-          {descriptionError && (
-            <p className="description-error">{descriptionError}</p>
-          )}
         </div>
+
+        {descriptionError && (
+          <p className="description-error">{descriptionError}</p>
+        )}
       </div>
     </div>
   );

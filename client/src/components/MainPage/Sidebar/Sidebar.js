@@ -7,8 +7,7 @@ import "./Sidebar.css";
 const Sidebar = () => {
   const navigate = useNavigate();
   const { logout } = useUser();
-  const [showSearch, setShowSearch] = useState(false);
-  const [showAccountInfo, setShowAccountInfo] = useState(false);
+  const [activeSection, setActiveSection] = useState(null); // Gérer la section active
 
   // Charger l'utilisateur depuis le localStorage
   const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
@@ -19,8 +18,8 @@ const Sidebar = () => {
     navigate("/"); // Redirige vers la page d'accueil
   };
 
-  const toggleAccountInfo = () => {
-    setShowAccountInfo(!showAccountInfo);
+  const toggleSection = (section) => {
+    setActiveSection((prevSection) => (prevSection === section ? null : section));
   };
 
   return (
@@ -30,13 +29,19 @@ const Sidebar = () => {
         <div className="sidebar-item" onClick={() => navigate("/main")}>
           🏠 Accueil
         </div>
-        <div className="sidebar-item" onClick={() => setShowSearch(!showSearch)}>
+        <div
+          className="sidebar-item"
+          onClick={() => toggleSection("search")}
+        >
           🔍 Rechercher
         </div>
         <div className="sidebar-item" onClick={() => navigate("/my-profile")}>
           👤 Profil
         </div>
-        <div className="sidebar-item" onClick={toggleAccountInfo}>
+        <div
+          className="sidebar-item"
+          onClick={() => toggleSection("accountInfo")}
+        >
           🟦 Infos
         </div>
         <div className="sidebar-item" onClick={handleLogout}>
@@ -44,27 +49,27 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Deuxième sidebar (recherche) */}
-      {showSearch && (
+      {/* Section de recherche */}
+      {activeSection === "search" && (
         <div className="search-sidebar">
           <SearchBar />
         </div>
       )}
 
       {/* Informations du compte */}
-      {showAccountInfo && userFromLocalStorage && (
+      {activeSection === "accountInfo" && userFromLocalStorage && (
         <div className="account-info">
           <h3>Informations du compte</h3>
-          <p>id : {userFromLocalStorage.id}</p>
-          <p>username : {userFromLocalStorage.username}</p>
-          <p>Email : {userFromLocalStorage.email}</p>
-          <p>Téléphone : {userFromLocalStorage.phoneNumber}</p>
-          <p>CreatedAt : {userFromLocalStorage.createdAt}</p>
+          <p><strong>ID :</strong> {userFromLocalStorage.id}</p>
+          <p><strong>Nom d'utilisateur :</strong> {userFromLocalStorage.username}</p>
+          <p><strong>Email :</strong> {userFromLocalStorage.email}</p>
+          <p><strong>Téléphone :</strong> {userFromLocalStorage.phoneNumber || "Non renseigné"}</p>
+          <p><strong>Créé le :</strong> {new Date(userFromLocalStorage.createdAt).toLocaleDateString()}</p>
           <button
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate("/my-profile")}
             className="profile-button"
           >
-            Voir le profil
+            Voir mon profil
           </button>
         </div>
       )}
@@ -73,5 +78,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-

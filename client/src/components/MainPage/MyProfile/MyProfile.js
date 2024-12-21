@@ -15,19 +15,19 @@ function MyProfile() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
-
+  
       const storedUser = JSON.parse(localStorage.getItem("user"));
       if (!storedUser || !storedUser.token || !storedUser.id) {
         setError("Utilisateur non authentifié.");
         setLoading(false);
         return;
       }
-
+  
       const { token, id } = storedUser;
-
+  
       setLoading(true);
       setError(null);
-
+  
       try {
         const response = await fetch(`${apiUrl}/query`, {
           method: "POST",
@@ -47,18 +47,24 @@ function MyProfile() {
             `,
           }),
         });
-
+  
         if (!response.ok) {
           throw new Error(`Échec de la requête : ${response.status}`);
         }
-
+  
         const { data, errors } = await response.json();
-
+  
         if (errors) {
           throw new Error(errors[0].message || "Erreur inconnue");
         }
-
-        setProfile(data.getUserProfile);
+  
+        // Ajouter un cache-buster pour forcer la mise à jour de l'avatar
+        const avatarUrlWithCacheBuster = `${data.getUserProfile.avatarUrl}?cachebuster=${Date.now()}`;
+  
+        setProfile({
+          ...data.getUserProfile,
+          avatarUrl: avatarUrlWithCacheBuster,
+        });
         setNewDescription(data.getUserProfile.description || "");
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
@@ -67,64 +73,60 @@ function MyProfile() {
         setLoading(false);
       }
     };
-
+  
     fetchUserProfile();
   }, []);
+  
 
   const handleAvatarChange = async (event) => {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+  const storedUser = JSON.parse(localStorage.getItem("user"));
 
-    if (!storedUser || !storedUser.token || !storedUser.id) {
-      setError("Utilisateur non authentifié.");
-      return;
+  if (!storedUser || !storedUser.token || !storedUser.id) {
+    setError("Utilisateur non authentifié.");
+    return;
+  }
+
+  const { token, id } = storedUser;
+  const file = event.target.files[0];
+
+  if (!file) {
+    return;
+  }
+
+  setUploading(true);
+  setAvatarError(null);
+
+  try {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    formData.append("userID", id);
+
+    const response = await fetch(`${apiUrl}/api/upload-avatar`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Échec du téléchargement : ${response.status}`);
     }
 
-    const { token, id } = storedUser;
-    const file = event.target.files[0];
+    // Forcer le rafraîchissement de l'avatar avec un cache-buster
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      avatarUrl: `${apiUrl}/api/user/${id}/profile-picture?timestamp=${Date.now()}`,
+    }));
+  } catch (error) {
+    console.error("Erreur lors du téléchargement de l'avatar :", error);
+    setAvatarError("Impossible de mettre à jour l'avatar.");
+  } finally {
+    setUploading(false);
+  }
+};
 
-    if (!file) {
-      return;
-    }
-
-    setUploading(true);
-    setAvatarError(null);
-
-    const previousAvatarUrl = profile.avatarUrl; // Sauvegarder l'ancien avatar
-
-    try {
-      const formData = new FormData();
-      formData.append("avatar", file);
-      formData.append("userID", id);
-
-      const response = await fetch(`${apiUrl}/api/upload-avatar`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Échec du téléchargement : ${response.status}`);
-      }
-
-      const avatarURL = `${apiUrl}/api/user/${id}/profile-picture?timestamp=${Date.now()}`;
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        avatarUrl: avatarURL,
-      }));
-    } catch (error) {
-      console.error("Erreur lors du téléchargement de l'avatar :", error);
-      setAvatarError("Impossible de mettre à jour l'avatar.");
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        avatarUrl: previousAvatarUrl, // Réinitialiser l'ancien avatar
-      }));
-    } finally {
-      setUploading(false);
-    }
-  };
 
   const handleDescriptionUpdate = async () => {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";

@@ -8,6 +8,7 @@ function SearchBar() {
   const [loading, setLoading] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080"; 
   const navigate = useNavigate();
+  const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
 
   const handleSearch = useCallback(async () => {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
@@ -61,7 +62,14 @@ function SearchBar() {
 
   // Fonction pour naviguer vers le profil utilisateur
   const handleUserClick = (id) => {
-    navigate(`/user/${id}`);
+    console.log(id);
+    console.log(userFromLocalStorage.id)
+    if(id === userFromLocalStorage.id){
+      navigate(`/my-profile`);
+    }
+    else{
+      navigate(`/user/${id}`);
+    }
   };
 
   return (
@@ -89,7 +97,8 @@ function SearchBar() {
             onClick={() => handleUserClick(user.id)}
           >
             <img
-              src={`${apiUrl}${user.avatarUrl || "/default-avatar.png"}`} // Inclure apiUrl dans le chemin              alt={`${user.username}'s avatar`}
+              src={`${apiUrl}${user.avatarUrl || "/default-avatar.png"}`}
+              alt={`${user.username}'s avatar`}
               className="search-result-avatar"
             />
             <span className="search-result-username">{user.username}</span>

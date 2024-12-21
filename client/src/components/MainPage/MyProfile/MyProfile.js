@@ -7,9 +7,10 @@ function MyProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [updatingDescription, setUpdatingDescription] = useState(false); // État pour la mise à jour de la description
-  const [newDescription, setNewDescription] = useState(""); // Stocker la nouvelle description
-  const [descriptionError, setDescriptionError] = useState(null); // Message d'erreur pour la description
+  const [updatingDescription, setUpdatingDescription] = useState(false);
+  const [newDescription, setNewDescription] = useState("");
+  const [descriptionError, setDescriptionError] = useState(null); // Gestion des erreurs pour la description
+  const [avatarError, setAvatarError] = useState(null); // Gestion des erreurs pour l'avatar
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -58,7 +59,7 @@ function MyProfile() {
         }
 
         setProfile(data.getUserProfile);
-        setNewDescription(data.getUserProfile.description || ""); // Initialiser la description
+        setNewDescription(data.getUserProfile.description || "");
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
         setError("Impossible de charger votre profil.");
@@ -69,6 +70,61 @@ function MyProfile() {
 
     fetchUserProfile();
   }, []);
+
+  const handleAvatarChange = async (event) => {
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser || !storedUser.token || !storedUser.id) {
+      setError("Utilisateur non authentifié.");
+      return;
+    }
+
+    const { token, id } = storedUser;
+    const file = event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    setUploading(true);
+    setAvatarError(null);
+
+    const previousAvatarUrl = profile.avatarUrl; // Sauvegarder l'ancien avatar
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      formData.append("userID", id);
+
+      const response = await fetch(`${apiUrl}/api/upload-avatar`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Échec du téléchargement : ${response.status}`);
+      }
+
+      const avatarURL = `${apiUrl}/api/user/${id}/profile-picture?timestamp=${Date.now()}`;
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        avatarUrl: avatarURL,
+      }));
+    } catch (error) {
+      console.error("Erreur lors du téléchargement de l'avatar :", error);
+      setAvatarError("Impossible de mettre à jour l'avatar.");
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        avatarUrl: previousAvatarUrl, // Réinitialiser l'ancien avatar
+      }));
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleDescriptionUpdate = async () => {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
@@ -122,6 +178,7 @@ function MyProfile() {
         ...prevProfile,
         description: data.updateProfilDescription.description,
       }));
+      setError(null);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de la description :", error);
       setDescriptionError("Impossible de mettre à jour la description.");
@@ -153,6 +210,17 @@ function MyProfile() {
             alt="Avatar"
             className="profile-avatar"
           />
+          <label className="avatar-change-icon">
+            📷
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              disabled={uploading}
+              style={{ display: "none" }}
+            />
+          </label>
+          {avatarError && <p className="avatar-error">{avatarError}</p>}
         </div>
         <div className="profile-details">
           <h1>{profile.username || "Utilisateur inconnu"}</h1>
@@ -179,4 +247,4 @@ function MyProfile() {
   );
 }
 
-export default MyProfile; //test//
+export default MyProfile;

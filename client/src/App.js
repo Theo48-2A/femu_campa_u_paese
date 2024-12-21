@@ -8,6 +8,7 @@ import MyProfile from "./components/MainPage/MyProfile/MyProfile";
 import SearchBar from "./components/MainPage/SearchBar/SearchBar";
 import UserProfile from "./components/MainPage/UserProfile/UserProfile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (

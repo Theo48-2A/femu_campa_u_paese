@@ -1,46 +1,103 @@
-/* Conteneur principal */
+/* ---- Structure générale ---- */
 .sidebar-container {
   display: flex;
   height: 100vh;
+  overflow: hidden; /* Évite la scroll bar si le contenu dépasse */
 }
 
-/* Sidebar principale */
-.sidebar {
-  width: flex;
-  background-color: #ffffff;
-  border-right: 1px solid #698996;
+/* ---- SIDEBAR PRINCIPALE ---- */
+.modern-sidebar {
+  position: relative;
+  width: 70px;            /* Barre étroite par défaut */
+  background-color: #1b1b1b; 
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  background-image: url("/app/public/images/test.jpg");
-  background-size: cover; /* L'image couvre toute la surface */
-  background-repeat: no-repeat; /* Empêche la répétition */
+  align-items: center;
+  padding-top: 20px;
+  transition: width 0.3s ease;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.3);
+  z-index: 10; /* Pour qu’elle soit au-dessus des autres sections */
+  
+  /* On veut que le texte ne “déborde” pas si la barre est étroite */
+  overflow: hidden;
 }
 
-.sidebar-item {
-  padding: 12px 10px;
-  margin: 5px 0;
+/* Au survol, la sidebar s'élargit et laisse apparaître le texte */
+.modern-sidebar:hover {
+  width: 220px; /* Ajuste la largeur selon tes besoins */
+}
+
+/* ---- MENU ---- */
+.sidebar-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;  /* Espace entre les icônes */
+  padding: 0 10px;
+  margin-top: 30px;
+}
+
+/* ---- Éléments du menu ---- */
+.menu-item {
+  display: flex;
+  align-items: center;
+  color: #fff;
   cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
+  padding: 10px 8px;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.sidebar-item:hover {
-  background-color: #f0f0f0;
+.menu-item:hover {
+  background-color: #333;
 }
 
-/* Deuxième sidebar (search bar) */
+/* ---- Icônes (grosses) ---- */
+.icon {
+  font-size: 24px;  /* Taille icône */
+  min-width: 40px;  /* Réserve l'espace */
+  text-align: center;
+}
+
+/* ---- Texte (caché par défaut) ---- */
+.text {
+  font-size: 15px;
+  margin-left: 5px;
+  white-space: nowrap; 
+  opacity: 0;                         /* invisible initialement */
+  transform: translateX(-15px);       /* petit décalage */
+  transition: 
+    opacity 0.3s ease, 
+    transform 0.3s ease;
+}
+
+/* Au survol, on fait apparaître le texte */
+.modern-sidebar:hover .text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---- SECTION RECHERCHE (quand "search" est actif) ---- */
 .search-sidebar {
   width: 300px;
   background-color: #f9f9f9;
   border-left: 1px solid #ddd;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   padding: 10px;
   animation: slideIn 0.3s ease-in-out;
 }
 
-/* Animation pour faire glisser la search bar */
+/* ---- SECTION INFOS COMPTE ---- */
+.account-info {
+  width: 300px;
+  background-color: #fff;
+  border-left: 1px solid #ddd;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Animations (pour le dépliement) */
 @keyframes slideIn {
   from {
     transform: translateX(100%);
@@ -48,4 +105,18 @@
   to {
     transform: translateX(0);
   }
+}
+
+/* Bouton profil */
+.profile-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.profile-button:hover {
+  background-color: #555;
 }

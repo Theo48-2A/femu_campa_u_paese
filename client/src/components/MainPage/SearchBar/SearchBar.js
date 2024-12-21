@@ -62,8 +62,6 @@ function SearchBar() {
 
   // Fonction pour naviguer vers le profil utilisateur
   const handleUserClick = (id) => {
-    console.log(id);
-    console.log(userFromLocalStorage.id)
     if(id === userFromLocalStorage.id){
       navigate(`/my-profile`);
     }

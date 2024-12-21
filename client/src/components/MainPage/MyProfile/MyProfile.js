@@ -9,6 +9,7 @@ function MyProfile() {
   const [uploading, setUploading] = useState(false);
   const [updatingDescription, setUpdatingDescription] = useState(false); // État pour la mise à jour de la description
   const [newDescription, setNewDescription] = useState(""); // Stocker la nouvelle description
+  const [descriptionError, setDescriptionError] = useState(null); // Message d'erreur pour la description
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -69,53 +70,6 @@ function MyProfile() {
     fetchUserProfile();
   }, []);
 
-  const handleAvatarChange = async (event) => {
-    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (!storedUser || !storedUser.token || !storedUser.id) {
-      setError("Utilisateur non authentifié.");
-      return;
-    }
-
-    const { token, id } = storedUser;
-    const file = event.target.files[0];
-
-    if (!file) {
-      return;
-    }
-
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("avatar", file);
-      formData.append("userID", id);
-
-      const response = await fetch(`${apiUrl}/api/upload-avatar`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Échec du téléchargement : ${response.status}`);
-      }
-
-      const avatarURL = `${apiUrl}/api/user/${id}/profile-picture?timestamp=${Date.now()}`;
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        avatarUrl: avatarURL,
-      }));
-    } catch (error) {
-      console.error("Erreur lors du téléchargement de l'avatar :", error);
-      setError("Impossible de mettre à jour l'avatar.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
   const handleDescriptionUpdate = async () => {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -128,11 +82,13 @@ function MyProfile() {
     const { token, id } = storedUser;
 
     if (!newDescription.trim()) {
-      setError("La description ne peut pas être vide.");
+      setDescriptionError("La description ne peut pas être vide.");
       return;
     }
 
     setUpdatingDescription(true);
+    setDescriptionError(null);
+
     try {
       const response = await fetch(`${apiUrl}/query`, {
         method: "POST",
@@ -166,10 +122,10 @@ function MyProfile() {
         ...prevProfile,
         description: data.updateProfilDescription.description,
       }));
-      setError(null);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de la description :", error);
-      setError("Impossible de mettre à jour la description.");
+      setDescriptionError("Impossible de mettre à jour la description.");
+      setNewDescription(profile.description || ""); // Réinitialiser à l'ancienne description
     } finally {
       setUpdatingDescription(false);
     }
@@ -197,16 +153,6 @@ function MyProfile() {
             alt="Avatar"
             className="profile-avatar"
           />
-          <label className="avatar-change-icon">
-            📷
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              disabled={uploading}
-              style={{ display: "none" }}
-            />
-          </label>
         </div>
         <div className="profile-details">
           <h1>{profile.username || "Utilisateur inconnu"}</h1>
@@ -224,6 +170,9 @@ function MyProfile() {
           >
             {updatingDescription ? "Mise à jour..." : "Mettre à jour"}
           </button>
+          {descriptionError && (
+            <p className="description-error">{descriptionError}</p>
+          )}
         </div>
       </div>
     </div>

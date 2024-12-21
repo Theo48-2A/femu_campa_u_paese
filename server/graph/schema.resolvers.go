@@ -71,8 +71,50 @@ func (r *mutationResolver) Login(ctx context.Context, username string, password 
 }
 
 // UpdateProfilDescription is the resolver for the updateProfilDescription field.
-func (r *mutationResolver) UpdateProfilDescription(ctx context.Context, description *string) (*model.UserProfile, error) {
-	panic(fmt.Errorf("not implemented: UpdateProfilDescription - updateProfilDescription"))
+func (r *mutationResolver) UpdateProfilDescription(ctx context.Context, userID string, description *string) (*model.UserProfile, error) {
+	log.Printf("Début UpdateProfilDescription\n")
+
+	// Vérifier si la description est valide
+	if description == nil || *description == "" {
+		return nil, fmt.Errorf("la description ne peut pas être vide")
+	}
+
+	// Vérifier si l'utilisateur existe dans la base de données
+	checkQuery := `
+        SELECT COUNT(*)
+        FROM user_profile
+        WHERE user_account_id = $1
+    `
+	var count int
+	err := database.DB.QueryRow(ctx, checkQuery, userID).Scan(&count)
+	if err != nil {
+		return nil, fmt.Errorf("erreur lors de la vérification de l'utilisateur : %v", err)
+	}
+	if count == 0 {
+		return nil, fmt.Errorf("aucun profil utilisateur trouvé pour l'ID : %s", userID)
+	}
+
+	// Mettre à jour la description dans la base de données
+	updateQuery := `
+        UPDATE user_profile
+        SET description = $1
+        WHERE user_account_id = $2
+        RETURNING description
+    `
+	var updatedDescription string
+	err = database.DB.QueryRow(ctx, updateQuery, *description, userID).Scan(&updatedDescription)
+	if err != nil {
+		return nil, fmt.Errorf("erreur lors de la mise à jour de la description : %v", err)
+	}
+
+	// Construire l'objet UserProfile mis à jour
+	userProfile := &model.UserProfile{
+		ID:          userID,
+		Description: &updatedDescription,
+	}
+
+	log.Printf("Fin UpdateProfilDescription\n")
+	return userProfile, nil
 }
 
 // SearchUsers inchangé

@@ -23,7 +23,7 @@ type AuthResponse {
 type Mutation {
   register(username: String!, password: String!, email: String!, phoneNumber: String): AuthResponse!
   login(username: String!, password: String!): AuthResponse!
-  updateProfilDescription(description: String): UserProfile! 
+  updateProfilDescription(userId: ID!, description: String): UserProfile! 
 }
 
 type Query {

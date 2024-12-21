@@ -56,7 +56,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		Login                   func(childComplexity int, username string, password string) int
 		Register                func(childComplexity int, username string, password string, email string, phoneNumber *string) int
-		UpdateProfilDescription func(childComplexity int, description *string) int
+		UpdateProfilDescription func(childComplexity int, userID string, description *string) int
 	}
 
 	Query struct {
@@ -84,7 +84,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error)
 	Login(ctx context.Context, username string, password string) (*model.AuthResponse, error)
-	UpdateProfilDescription(ctx context.Context, description *string) (*model.UserProfile, error)
+	UpdateProfilDescription(ctx context.Context, userID string, description *string) (*model.UserProfile, error)
 }
 type QueryResolver interface {
 	SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserProfile, error)
@@ -165,7 +165,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateProfilDescription(childComplexity, args["description"].(*string)), true
+		return e.complexity.Mutation.UpdateProfilDescription(childComplexity, args["userId"].(string), args["description"].(*string)), true
 
 	case "Query.getUserProfile":
 		if e.complexity.Query.GetUserProfile == nil {
@@ -505,13 +505,31 @@ func (ec *executionContext) field_Mutation_register_argsPhoneNumber(
 func (ec *executionContext) field_Mutation_updateProfilDescription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Mutation_updateProfilDescription_argsDescription(ctx, rawArgs)
+	arg0, err := ec.field_Mutation_updateProfilDescription_argsUserID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["description"] = arg0
+	args["userId"] = arg0
+	arg1, err := ec.field_Mutation_updateProfilDescription_argsDescription(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["description"] = arg1
 	return args, nil
 }
+func (ec *executionContext) field_Mutation_updateProfilDescription_argsUserID(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+	if tmp, ok := rawArgs["userId"]; ok {
+		return ec.unmarshalNID2string(ctx, tmp)
+	}
+
+	var zeroVal string
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Mutation_updateProfilDescription_argsDescription(
 	ctx context.Context,
 	rawArgs map[string]interface{},
@@ -949,7 +967,7 @@ func (ec *executionContext) _Mutation_updateProfilDescription(ctx context.Contex
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateProfilDescription(rctx, fc.Args["description"].(*string))
+		return ec.resolvers.Mutation().UpdateProfilDescription(rctx, fc.Args["userId"].(string), fc.Args["description"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

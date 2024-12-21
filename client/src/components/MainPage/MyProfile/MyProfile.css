@@ -1,10 +1,10 @@
-
 /* Conteneur principal de la page */
 .profile-page {
   display: flex;
   height: 100vh;
-  width: 100vw; 
-  background-color: #f9f9f9;
+  width: 100vw;
+  background-color: #f4f4f9; /* Couleur de fond légèrement plus douce */
+  overflow: hidden; /* Évite les débordements */
 }
 
 /* Conteneur de la section principale */
@@ -12,27 +12,32 @@
   flex: 1;
   padding: 20px;
   display: flex;
-  flex-direction: column; /* Les enfants sont alignés en colonne */
-  justify-content: flex-start; /* Aligne le contenu en haut */
-  overflow-y: auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
 }
 
 /* Section supérieure */
 .profile-header {
   display: flex;
-  align-items: flex-start; /* Aligne les éléments en haut */
+  align-items: center; /* Centre les éléments verticalement */
   justify-content: flex-start;
+  gap: 20px; /* Ajoute un espace entre l'avatar et les informations */
   margin-bottom: 20px;
-  padding-top: 0;
 }
 
 /* Avatar de l'utilisateur */
 .profile-avatar {
-  width: 100px; /* Taille ajustée */
-  height: 100px;
+  width: 120px; /* Taille légèrement plus grande */
+  height: 120px;
   border-radius: 50%;
-  margin-right: 20px;
-  border: 2px solid #ddd;
+  border: 3px solid #ddd; /* Bordure plus visible */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Ajoute une ombre douce */
+  transition: transform 0.3s ease;
+}
+
+.profile-avatar:hover {
+  transform: scale(1.05); /* Effet au survol */
 }
 
 /* Informations utilisateur */
@@ -41,25 +46,26 @@
 }
 
 .profile-username {
-  font-size: 1.8rem;
+  font-size: 2rem; /* Police plus grande */
   font-weight: bold;
-  margin-bottom: 5px;
+  color: #333; /* Couleur légèrement plus foncée */
+  margin-bottom: 10px;
 }
 
 .profile-bio {
   font-size: 1rem;
-  color: #666;
-  white-space: pre-line;
-  margin-bottom: 10px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 15px;
 }
 
 .profile-stats {
   display: flex;
-  gap: 15px;
+  gap: 20px;
 }
 
 .profile-stats span {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #444;
   font-weight: bold;
 }
@@ -68,7 +74,7 @@
 .profile-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+  gap: 15px; /* Espacement entre les images */
   margin-top: 20px;
 }
 
@@ -76,11 +82,34 @@
   width: 100%;
   height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px; /* Coins plus arrondis */
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Ombre douce */
 }
 
 .gallery-photo:hover {
-  transform: scale(1.05);
+  transform: scale(1.1); /* Zoom légèrement plus important */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+}
+
+/* Bouton ou éléments interactifs */
+button {
+  padding: 10px 15px;
+  background-color: #4caf50; /* Couleur verte agréable */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #388e3c; /* Couleur plus sombre au survol */
+}
+
+button:disabled {
+  background-color: #9e9e9e;
+  cursor: not-allowed;
 }

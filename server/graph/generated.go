@@ -87,7 +87,7 @@ type MutationResolver interface {
 	UpdateProfilDescription(ctx context.Context, description *string) (*model.UserProfile, error)
 }
 type QueryResolver interface {
-	SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error)
+	SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserProfile, error)
 	GetUserProfile(ctx context.Context, userID string) (*model.UserProfile, error)
 }
 
@@ -1026,9 +1026,9 @@ func (ec *executionContext) _Query_searchUsers(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.UserAccount)
+	res := resTmp.([]*model.UserProfile)
 	fc.Result = res
-	return ec.marshalNUserAccount2ᚕᚖserverᚋgraphᚋmodelᚐUserAccount(ctx, field.Selections, res)
+	return ec.marshalNUserProfile2ᚕᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_searchUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1040,19 +1040,15 @@ func (ec *executionContext) fieldContext_Query_searchUsers(ctx context.Context, 
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_UserAccount_id(ctx, field)
+				return ec.fieldContext_UserProfile_id(ctx, field)
+			case "description":
+				return ec.fieldContext_UserProfile_description(ctx, field)
+			case "avatarUrl":
+				return ec.fieldContext_UserProfile_avatarUrl(ctx, field)
 			case "username":
-				return ec.fieldContext_UserAccount_username(ctx, field)
-			case "email":
-				return ec.fieldContext_UserAccount_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_UserAccount_phoneNumber(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_UserAccount_createdAt(ctx, field)
-			case "profile":
-				return ec.fieldContext_UserAccount_profile(ctx, field)
+				return ec.fieldContext_UserProfile_username(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type UserAccount", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type UserProfile", field.Name)
 		},
 	}
 	defer func() {
@@ -4176,7 +4172,21 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUserAccount2ᚕᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v []*model.UserAccount) graphql.Marshaler {
+func (ec *executionContext) marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UserAccount(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUserProfile2serverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v model.UserProfile) graphql.Marshaler {
+	return ec._UserProfile(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUserProfile2ᚕᚖserverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v []*model.UserProfile) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4200,7 +4210,7 @@ func (ec *executionContext) marshalNUserAccount2ᚕᚖserverᚋgraphᚋmodelᚐU
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx, sel, v[i])
+			ret[i] = ec.marshalOUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4212,20 +4222,6 @@ func (ec *executionContext) marshalNUserAccount2ᚕᚖserverᚋgraphᚋmodelᚐU
 	wg.Wait()
 
 	return ret
-}
-
-func (ec *executionContext) marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._UserAccount(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNUserProfile2serverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v model.UserProfile) graphql.Marshaler {
-	return ec._UserProfile(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v *model.UserProfile) graphql.Marshaler {
@@ -4547,13 +4543,6 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._UserAccount(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v *model.UserProfile) graphql.Marshaler {

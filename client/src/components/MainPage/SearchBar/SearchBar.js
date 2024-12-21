@@ -6,6 +6,7 @@ function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080"; 
   const navigate = useNavigate();
 
   const handleSearch = useCallback(async () => {
@@ -23,6 +24,7 @@ function SearchBar() {
               searchUsers(prefix: "${query}", limit: 10) {
                 id
                 username
+                avatarUrl
               }
             }
           `,
@@ -31,6 +33,7 @@ function SearchBar() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Résultats de la recherche :", data.data.searchUsers);
         setResults(data.data.searchUsers || []);
       }
     } catch (error) {
@@ -58,7 +61,7 @@ function SearchBar() {
 
   // Fonction pour naviguer vers le profil utilisateur
   const handleUserClick = (id) => {
-    navigate(`/user/${id}`); // Redirection vers la page de profil avec l'ID
+    navigate(`/user/${id}`);
   };
 
   return (
@@ -83,9 +86,13 @@ function SearchBar() {
           <div
             key={user.id}
             className="search-result-item"
-            onClick={() => handleUserClick(user.id)} // Redirection au clic
+            onClick={() => handleUserClick(user.id)}
           >
-            {user.username}
+            <img
+              src={`${apiUrl}${user.avatarUrl || "/default-avatar.png"}`} // Inclure apiUrl dans le chemin              alt={`${user.username}'s avatar`}
+              className="search-result-avatar"
+            />
+            <span className="search-result-username">{user.username}</span>
           </div>
         ))}
         {results.length === 0 && query && !loading && (

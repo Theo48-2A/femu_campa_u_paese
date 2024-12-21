@@ -7,18 +7,20 @@ import (
 	"server/graph/model"
 )
 
-func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserAccount, error) {
+func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserProfile, error) {
 	fmt.Printf("In schema.resolvers.go, func SearchUsers : debut\n")
 	maxResults := 10
 	if limit != nil {
 		maxResults = *limit
 	}
 
-	// Requête SQL ne récupérant que id et username
+	// Requête SQL mise à jour pour inclure le username et l'avatar_url
 	query := `
-        SELECT id, username
-        FROM user_account
-        WHERE LOWER(username) LIKE $1
+        SELECT user_profile.id, user_account.username, user_profile.avatar_url
+        FROM user_profile
+        JOIN user_account
+        ON user_profile.user_account_id = user_account.id
+        WHERE LOWER(user_account.username) LIKE $1
         LIMIT $2;
     `
 
@@ -29,12 +31,12 @@ func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserAc
 	defer rows.Close()
 
 	// Préparation d'un tableau pour stocker les résultats
-	var users []*model.UserAccount
+	var users []*model.UserProfile
 	for rows.Next() {
-		var user model.UserAccount
+		var user model.UserProfile
 
-		// Récupération des champs id et username uniquement
-		if err := rows.Scan(&user.ID, &user.Username); err != nil {
+		// Récupération des champs id, username et avatar_url
+		if err := rows.Scan(&user.ID, &user.Username, &user.AvatarURL); err != nil {
 			return nil, err
 		}
 

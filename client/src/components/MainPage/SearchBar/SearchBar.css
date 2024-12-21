@@ -59,6 +59,8 @@
 }
 
 .search-result-item {
+  display: flex; /* Alignement horizontal des éléments */
+  align-items: center; /* Centrer verticalement */
   padding: 8px;
   border-bottom: 1px solid #eaeaea;
 }
@@ -66,4 +68,17 @@
 .search-result-item:hover {
   background-color: #f0f0f0;
   cursor: pointer;
+}
+
+.search-result-avatar {
+  width: 32px; /* Taille de l'avatar */
+  height: 32px;
+  border-radius: 50%; /* Forme circulaire */
+  margin-right: 10px; /* Espacement entre l'avatar et le texte */
+  object-fit: cover; /* Ajuste l'image pour qu'elle remplisse le cadre */
+}
+
+.search-result-username {
+  font-size: 14px;
+  color: #333;
 }

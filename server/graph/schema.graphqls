@@ -14,7 +14,6 @@ type UserProfile {
   username: String!
 }
 
-
 type AuthResponse {
   user: UserAccount!
   token: String!
@@ -28,6 +27,6 @@ type Mutation {
 }
 
 type Query {
-  searchUsers(prefix: String!, limit: Int = 10): [UserAccount]!
+  searchUsers(prefix: String!, limit: Int = 10): [UserProfile]!
   getUserProfile(userId: ID!): UserProfile! 
 }

@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"server/v1/database"
+	"server/api/v1/database"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ func UserAvatarHandler(w http.ResponseWriter, r *http.Request) {
 
 		if userID == "default" {
 			// Avatar par défaut
-			imagePath := "./v1/uploads/default.jpg"
+			imagePath := "./api/v1/uploads/default.jpg"
 			if _, err := os.Stat(imagePath); os.IsNotExist(err) {
 				http.NotFound(w, r)
 				return
@@ -31,7 +31,7 @@ func UserAvatarHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// On cherche un fichier avatar_userID.*
 			pattern := fmt.Sprintf("avatar_%s.*", userID)
-			matches, err := filepath.Glob(filepath.Join("./v1/uploads", pattern))
+			matches, err := filepath.Glob(filepath.Join("./api/v1/uploads", pattern))
 			if err != nil || len(matches) == 0 {
 				http.NotFound(w, r)
 				return
@@ -91,7 +91,7 @@ func UploadAvatarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Nettoyer les anciens avatars
-	uploadDir := "./v1/uploads"
+	uploadDir := "./api/v1/uploads"
 	pattern := fmt.Sprintf("avatar_%s.*", userID)
 	oldFiles, err := filepath.Glob(filepath.Join(uploadDir, pattern))
 	if err == nil {
@@ -128,20 +128,4 @@ func UploadAvatarHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Avatar mis à jour avec succès : %s", avatarURL)
-}
-
-// Juste pour l’exemple, tu peux le séparer en un fichier middleware.go
-func EnableCORS(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
-
-		if r.Method == "OPTIONS" {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }

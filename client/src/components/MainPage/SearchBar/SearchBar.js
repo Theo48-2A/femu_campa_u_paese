@@ -16,7 +16,7 @@ function SearchBar() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/graphql`, {
+      const response = await fetch(`${apiUrl}/api/graphql`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

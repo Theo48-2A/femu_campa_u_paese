@@ -2,7 +2,7 @@ package routes
 
 import (
 	"net/http"
-	"server/v1/rest"
+	"server/api/v1/rest"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -10,8 +10,8 @@ import (
 
 func SetupRoutes(mux *http.ServeMux, gqlHandler *handler.Server) {
 	// Routes GraphQL
-	mux.Handle("/", EnableCORS(playground.Handler("GraphQL playground", "/query")))
-	mux.Handle("/graphql", EnableCORS(gqlHandler))
+	mux.Handle("/api", EnableCORS(playground.Handler("GraphQL playground", "/query")))
+	mux.Handle("/api/graphql", EnableCORS(gqlHandler))
 
 	// Routes REST
 	mux.Handle("/api/user/", EnableCORS(http.HandlerFunc(rest.UserAvatarHandler)))

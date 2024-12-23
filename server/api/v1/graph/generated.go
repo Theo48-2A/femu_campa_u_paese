@@ -8,7 +8,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"server/v1/graph/model"
+	"server/api/v1/graph/model"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -712,7 +712,7 @@ func (ec *executionContext) _AuthResponse_user(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.UserAccount)
 	fc.Result = res
-	return ec.marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx, field.Selections, res)
+	return ec.marshalNUserAccount2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserAccount(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuthResponse_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -855,7 +855,7 @@ func (ec *executionContext) _Mutation_register(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.AuthResponse)
 	fc.Result = res
-	return ec.marshalNAuthResponse2ᚖserverᚋgraphᚋmodelᚐAuthResponse(ctx, field.Selections, res)
+	return ec.marshalNAuthResponse2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐAuthResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_register(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -918,7 +918,7 @@ func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.AuthResponse)
 	fc.Result = res
-	return ec.marshalNAuthResponse2ᚖserverᚋgraphᚋmodelᚐAuthResponse(ctx, field.Selections, res)
+	return ec.marshalNAuthResponse2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐAuthResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_login(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -981,7 +981,7 @@ func (ec *executionContext) _Mutation_updateProfilDescription(ctx context.Contex
 	}
 	res := resTmp.(*model.UserProfile)
 	fc.Result = res
-	return ec.marshalNUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
+	return ec.marshalNUserProfile2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateProfilDescription(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1046,7 +1046,7 @@ func (ec *executionContext) _Query_searchUsers(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.UserProfile)
 	fc.Result = res
-	return ec.marshalNUserProfile2ᚕᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
+	return ec.marshalNUserProfile2ᚕᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_searchUsers(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1111,7 +1111,7 @@ func (ec *executionContext) _Query_getUserProfile(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.UserProfile)
 	fc.Result = res
-	return ec.marshalNUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
+	return ec.marshalNUserProfile2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getUserProfile(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1519,7 +1519,7 @@ func (ec *executionContext) _UserAccount_profile(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.UserProfile)
 	fc.Result = res
-	return ec.marshalOUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
+	return ec.marshalOUserProfile2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UserAccount_profile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4131,11 +4131,11 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAuthResponse2serverᚋgraphᚋmodelᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v model.AuthResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNAuthResponse2serverᚋapiᚋv1ᚋgraphᚋmodelᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v model.AuthResponse) graphql.Marshaler {
 	return ec._AuthResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAuthResponse2ᚖserverᚋgraphᚋmodelᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v *model.AuthResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNAuthResponse2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐAuthResponse(ctx context.Context, sel ast.SelectionSet, v *model.AuthResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4190,7 +4190,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
+func (ec *executionContext) marshalNUserAccount2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserAccount(ctx context.Context, sel ast.SelectionSet, v *model.UserAccount) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4200,11 +4200,11 @@ func (ec *executionContext) marshalNUserAccount2ᚖserverᚋgraphᚋmodelᚐUser
 	return ec._UserAccount(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserProfile2serverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v model.UserProfile) graphql.Marshaler {
+func (ec *executionContext) marshalNUserProfile2serverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v model.UserProfile) graphql.Marshaler {
 	return ec._UserProfile(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserProfile2ᚕᚖserverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v []*model.UserProfile) graphql.Marshaler {
+func (ec *executionContext) marshalNUserProfile2ᚕᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v []*model.UserProfile) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4228,7 +4228,7 @@ func (ec *executionContext) marshalNUserProfile2ᚕᚖserverᚋgraphᚋmodelᚐU
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx, sel, v[i])
+			ret[i] = ec.marshalOUserProfile2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4242,7 +4242,7 @@ func (ec *executionContext) marshalNUserProfile2ᚕᚖserverᚋgraphᚋmodelᚐU
 	return ret
 }
 
-func (ec *executionContext) marshalNUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v *model.UserProfile) graphql.Marshaler {
+func (ec *executionContext) marshalNUserProfile2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v *model.UserProfile) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4563,7 +4563,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalOUserProfile2ᚖserverᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v *model.UserProfile) graphql.Marshaler {
+func (ec *executionContext) marshalOUserProfile2ᚖserverᚋapiᚋv1ᚋgraphᚋmodelᚐUserProfile(ctx context.Context, sel ast.SelectionSet, v *model.UserProfile) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

@@ -3,8 +3,8 @@ package search_users
 import (
 	"context"
 	"fmt"
-	"server/v1/database"
-	"server/v1/graph/model"
+	"server/api/v1/database"
+	"server/api/v1/graph/model"
 )
 
 func SearchUser(ctx context.Context, prefix string, limit *int) ([]*model.UserProfile, error) {

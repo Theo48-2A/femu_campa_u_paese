@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"server/v1/database"
-	"server/v1/graph"
-	"server/v1/routes"
+	"server/api/v1/database"
+	"server/api/v1/graph"
+	"server/api/v1/routes"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 )

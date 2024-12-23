@@ -9,15 +9,16 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"server/v1/auth"
-	"server/v1/database"
-	"server/v1/graph/model"
-	search_users "server/v1/graph/resolver_logic/social"
-	"server/v1/graph/resolver_logic/user_account/login"
-	"server/v1/graph/resolver_logic/user_account/register"
+	"server/api/v1/auth"
+	"server/api/v1/database"
+	"server/api/v1/graph/model"
+	search_users "server/api/v1/graph/resolver_logic/social"
+	"server/api/v1/graph/resolver_logic/user_account/login"
+	"server/api/v1/graph/resolver_logic/user_account/register"
 	"strconv"
 )
 
+// Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error) {
 	message, err := register.Register(ctx, username, password, email, phoneNumber)
 	if err != nil {
@@ -46,6 +47,7 @@ func (r *mutationResolver) Register(ctx context.Context, username string, passwo
 	}, nil
 }
 
+// Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, username string, password string) (*model.AuthResponse, error) {
 	user, err := login.Login(ctx, username, password)
 	if err != nil {
@@ -68,6 +70,7 @@ func (r *mutationResolver) Login(ctx context.Context, username string, password 
 	}, nil
 }
 
+// UpdateProfilDescription is the resolver for the updateProfilDescription field.
 func (r *mutationResolver) UpdateProfilDescription(ctx context.Context, userID string, description *string) (*model.UserProfile, error) {
 	log.Printf("Début UpdateProfilDescription\n")
 
@@ -114,6 +117,7 @@ func (r *mutationResolver) UpdateProfilDescription(ctx context.Context, userID s
 	return userProfile, nil
 }
 
+// SearchUsers is the resolver for the searchUsers field.
 func (r *queryResolver) SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserProfile, error) {
 	fmt.Printf("In schema.resolvers.go, func SearchUsers")
 	return search_users.SearchUser(ctx, prefix, limit)
@@ -164,8 +168,11 @@ func (r *queryResolver) GetUserProfile(ctx context.Context, userID string) (*mod
 	return &userProfile, nil
 }
 
+// Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-func (r *Resolver) Query() QueryResolver       { return &queryResolver{r} }
+
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

@@ -28,7 +28,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./server/uploads:/app/uploads  # Ajout de cette ligne
+      - ./server/api/v1/uploads:/app/uploads  
 
   db:
     image: postgres:17

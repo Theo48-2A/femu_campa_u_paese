@@ -13,7 +13,7 @@ function Login() {
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
     try {
-      const response = await fetch(`${apiUrl}/graphql`, {
+      const response = await fetch(`${apiUrl}/api/graphql`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

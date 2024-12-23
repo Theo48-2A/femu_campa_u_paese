@@ -29,7 +29,7 @@ function MyProfile() {
       setError(null);
 
       try {
-        const response = await fetch(`${apiUrl}/query`, {
+        const response = await fetch(`${apiUrl}/graphql`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -143,7 +143,7 @@ function MyProfile() {
     setDescriptionError(null);
 
     try {
-      const response = await fetch(`${apiUrl}/query`, {
+      const response = await fetch(`${apiUrl}/graphql`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

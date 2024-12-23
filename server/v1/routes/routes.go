@@ -11,7 +11,7 @@ import (
 func SetupRoutes(mux *http.ServeMux, gqlHandler *handler.Server) {
 	// Routes GraphQL
 	mux.Handle("/", EnableCORS(playground.Handler("GraphQL playground", "/query")))
-	mux.Handle("/query", EnableCORS(gqlHandler))
+	mux.Handle("/graphql", EnableCORS(gqlHandler))
 
 	// Routes REST
 	mux.Handle("/api/user/", EnableCORS(http.HandlerFunc(rest.UserAvatarHandler)))

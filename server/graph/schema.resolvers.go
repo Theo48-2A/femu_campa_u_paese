@@ -10,15 +10,14 @@ import (
 	"fmt"
 	"log"
 	"server/auth"
-	search_users "server/content/social"
-	"server/content/user_account/login"
-	"server/content/user_account/register"
 	"server/database"
 	"server/graph/model"
+	search_users "server/graph/resolver_logic/social"
+	"server/graph/resolver_logic/user_account/login"
+	"server/graph/resolver_logic/user_account/register"
 	"strconv"
 )
 
-// Register est inchangé
 func (r *mutationResolver) Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error) {
 	message, err := register.Register(ctx, username, password, email, phoneNumber)
 	if err != nil {
@@ -47,7 +46,6 @@ func (r *mutationResolver) Register(ctx context.Context, username string, passwo
 	}, nil
 }
 
-// Login est inchangé
 func (r *mutationResolver) Login(ctx context.Context, username string, password string) (*model.AuthResponse, error) {
 	user, err := login.Login(ctx, username, password)
 	if err != nil {
@@ -70,7 +68,6 @@ func (r *mutationResolver) Login(ctx context.Context, username string, password 
 	}, nil
 }
 
-// UpdateProfilDescription is the resolver for the updateProfilDescription field.
 func (r *mutationResolver) UpdateProfilDescription(ctx context.Context, userID string, description *string) (*model.UserProfile, error) {
 	log.Printf("Début UpdateProfilDescription\n")
 
@@ -117,7 +114,6 @@ func (r *mutationResolver) UpdateProfilDescription(ctx context.Context, userID s
 	return userProfile, nil
 }
 
-// SearchUsers inchangé
 func (r *queryResolver) SearchUsers(ctx context.Context, prefix string, limit *int) ([]*model.UserProfile, error) {
 	fmt.Printf("In schema.resolvers.go, func SearchUsers")
 	return search_users.SearchUser(ctx, prefix, limit)
@@ -168,11 +164,8 @@ func (r *queryResolver) GetUserProfile(ctx context.Context, userID string) (*mod
 	return &userProfile, nil
 }
 
-// Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-
-// Query returns QueryResolver implementation.
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+func (r *Resolver) Query() QueryResolver       { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

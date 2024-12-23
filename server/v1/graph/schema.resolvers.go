@@ -9,12 +9,12 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"server/auth"
-	"server/database"
-	"server/graph/model"
-	search_users "server/graph/resolver_logic/social"
-	"server/graph/resolver_logic/user_account/login"
-	"server/graph/resolver_logic/user_account/register"
+	"server/v1/auth"
+	"server/v1/database"
+	"server/v1/graph/model"
+	search_users "server/v1/graph/resolver_logic/social"
+	"server/v1/graph/resolver_logic/user_account/login"
+	"server/v1/graph/resolver_logic/user_account/register"
 	"strconv"
 )
 

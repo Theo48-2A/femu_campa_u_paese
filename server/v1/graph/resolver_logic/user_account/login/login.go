@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"server/database"
-	"server/graph/model"
+	"server/v1/database"
+	"server/v1/graph/model"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"

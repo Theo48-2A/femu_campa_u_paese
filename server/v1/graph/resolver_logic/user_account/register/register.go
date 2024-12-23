@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"server/database"
+	"server/v1/database"
 
 	"golang.org/x/crypto/bcrypt"
 )

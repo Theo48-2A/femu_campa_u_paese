@@ -7,7 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"server/database"
+	"server/v1/database"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ func UserAvatarHandler(w http.ResponseWriter, r *http.Request) {
 
 		if userID == "default" {
 			// Avatar par défaut
-			imagePath := "./uploads/default.jpg"
+			imagePath := "./v1/uploads/default.jpg"
 			if _, err := os.Stat(imagePath); os.IsNotExist(err) {
 				http.NotFound(w, r)
 				return
@@ -31,7 +31,7 @@ func UserAvatarHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			// On cherche un fichier avatar_userID.*
 			pattern := fmt.Sprintf("avatar_%s.*", userID)
-			matches, err := filepath.Glob(filepath.Join("./uploads", pattern))
+			matches, err := filepath.Glob(filepath.Join("./v1/uploads", pattern))
 			if err != nil || len(matches) == 0 {
 				http.NotFound(w, r)
 				return
@@ -91,7 +91,7 @@ func UploadAvatarHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Nettoyer les anciens avatars
-	uploadDir := "./uploads"
+	uploadDir := "./v1/uploads"
 	pattern := fmt.Sprintf("avatar_%s.*", userID)
 	oldFiles, err := filepath.Glob(filepath.Join(uploadDir, pattern))
 	if err == nil {

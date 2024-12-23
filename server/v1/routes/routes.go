@@ -2,7 +2,7 @@ package routes
 
 import (
 	"net/http"
-	"server/rest"
+	"server/v1/rest"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"

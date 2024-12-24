@@ -9,65 +9,27 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"server/api/v1/auth"
 	"server/api/v1/database"
 	"server/api/v1/graph/model"
 	search_users "server/api/v1/graph/resolver_logic/social"
 	"server/api/v1/graph/resolver_logic/user_account/login"
 	"server/api/v1/graph/resolver_logic/user_account/register"
-	"strconv"
+	"server/api/v1/graph/resolver_logic/user_account/reset_password"
 )
 
 // Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, username string, password string, email string, phoneNumber *string) (*model.AuthResponse, error) {
-	message, err := register.Register(ctx, username, password, email, phoneNumber)
-	if err != nil {
-		return nil, fmt.Errorf("error registering user: %v", err)
-	}
-
-	user, err := login.Login(ctx, username, password)
-	if err != nil {
-		return nil, fmt.Errorf("error logging in: %v", err)
-	}
-
-	userID, err := strconv.Atoi(user.ID)
-	if err != nil {
-		return nil, fmt.Errorf("invalid user ID: %v", err)
-	}
-
-	token, err := auth.GenerateJWT(int(userID), user.Username)
-	if err != nil {
-		return nil, fmt.Errorf("error generating JWT: %v", err)
-	}
-
-	return &model.AuthResponse{
-		Token:   token,
-		User:    user,
-		Message: &message,
-	}, nil
+	return register.Register(ctx, username, password, email, phoneNumber)
 }
 
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, username string, password string) (*model.AuthResponse, error) {
-	user, err := login.Login(ctx, username, password)
-	if err != nil {
-		return nil, fmt.Errorf("error logging in: %v", err)
-	}
+	return login.Login(ctx, username, password)
+}
 
-	userID, err := strconv.Atoi(user.ID)
-	if err != nil {
-		return nil, fmt.Errorf("invalid user ID: %v", err)
-	}
-
-	token, err := auth.GenerateJWT(int(userID), user.Username)
-	if err != nil {
-		return nil, fmt.Errorf("error generating JWT: %v", err)
-	}
-
-	return &model.AuthResponse{
-		Token: token,
-		User:  user,
-	}, nil
+// / ResetPassword is the resolver for the resetPassword field.
+func (r *mutationResolver) ResetPassword(ctx context.Context, email string) (*model.AuthResponse, error) {
+	return reset_password.ResetPassword(ctx, email)
 }
 
 // UpdateProfilDescription is the resolver for the updateProfilDescription field.

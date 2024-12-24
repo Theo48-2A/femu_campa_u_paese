@@ -4,14 +4,16 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"server/api/v1/auth"
 	"server/api/v1/database"
 	"server/api/v1/graph/model"
+	"strconv"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(ctx context.Context, username, password string) (*model.UserAccount, error) {
+func Login(ctx context.Context, username, password string) (*model.AuthResponse, error) {
 	// Debug log pour suivre le processus
 	log.Printf("Attempting login for username: %s", username)
 
@@ -23,7 +25,7 @@ func Login(ctx context.Context, username, password string) (*model.UserAccount, 
 
 	err := database.DB.QueryRow(ctx, query, username).Scan(
 		&user.ID,
-		&user.Username, // Ajout du scan du champ username
+		&user.Username,
 		&hashedPassword,
 		&user.Email,
 		&user.PhoneNumber,
@@ -47,7 +49,22 @@ func Login(ctx context.Context, username, password string) (*model.UserAccount, 
 		return nil, fmt.Errorf("invalid username or password")
 	}
 
-	// Si tout est OK
+	// Convertir l'ID utilisateur en entier
+	userID, err := strconv.Atoi(user.ID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid user ID: %v", err)
+	}
+
+	// Générer le JWT
+	token, err := auth.GenerateJWT(userID, user.Username)
+	if err != nil {
+		return nil, fmt.Errorf("error generating JWT: %v", err)
+	}
+
+	// Retourner la réponse AuthResponse
 	log.Printf("User %s logged in successfully", username)
-	return &user, nil
+	return &model.AuthResponse{
+		Token: token,
+		User:  &user,
+	}, nil
 }

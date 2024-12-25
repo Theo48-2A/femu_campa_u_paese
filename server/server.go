@@ -2,11 +2,9 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"server/api/v1/database"
 	"server/api/v1/graph"
 	"server/api/v1/routes"
@@ -18,28 +16,6 @@ import (
 const defaultPort = "8080"
 
 func main() {
-
-	// Obtenir le répertoire courant
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("Error getting current working directory: %v", err)
-	}
-
-	// Lister les fichiers et dossiers de manière récursive
-	fmt.Println("Files and directories in", cwd, ":")
-	err = filepath.Walk(cwd, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			log.Printf("Error accessing path %s: %v", path, err)
-			return nil
-		}
-		// Afficher le chemin relatif pour chaque fichier/dossier
-		fmt.Println(path)
-		return nil
-	})
-
-	if err != nil {
-		log.Fatalf("Error walking through the directory: %v", err)
-	}
 
 	// Configurer l'environnement
 	if err := configureEnvironment(); err != nil {

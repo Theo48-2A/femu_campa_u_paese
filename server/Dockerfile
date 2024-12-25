@@ -14,8 +14,6 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 
 WORKDIR /app
 COPY --from=build /app/server .
-COPY --from=build /app/api/v1/uploads ./v1/uploads
-COPY .env /app/.env
 EXPOSE 8080
 CMD ["./server"]
 

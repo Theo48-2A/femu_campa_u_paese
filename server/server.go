@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -10,17 +9,17 @@ import (
 	"server/api/v1/routes"
 
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/joho/godotenv"
 )
 
 const defaultPort = "8080"
 
 func main() {
 
-	// Configurer l'environnement
-	if err := configureEnvironment(); err != nil {
-		log.Fatalf("Failed to configure environment: %v", err)
+	appEnv := os.Getenv("APP_ENV")
+	if appEnv != "development" && appEnv != "production" {
+		log.Fatalf("Invalid APP_ENV value: %s. Expected 'development' or 'production'", appEnv)
 	}
+	log.Printf("Current APP_ENV: %s", appEnv)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -43,35 +42,4 @@ func main() {
 
 	log.Printf("Connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe("0.0.0.0:"+port, mux))
-}
-
-// configureEnvironment gère le chargement des variables d'environnement en fonction du mode
-func configureEnvironment() error {
-	// Détection de l'environnement
-	appEnv := os.Getenv("APP_ENV")
-
-	if appEnv == "production" {
-		log.Println("Running in production environment")
-	} else if appEnv == "" {
-		log.Println("APP_ENV not foumonculnd, assuming development environment")
-
-		// Charger le fichier .env pour définir les variables d'environnement
-		err := godotenv.Load(".env")
-		if err != nil {
-			log.Printf("Error loading .env file: %v", err)
-			return errors.New("error loading .env file")
-		}
-
-		// Vérifier que APP_ENV est défini comme "development"
-		appEnv = os.Getenv("APP_ENV")
-		if appEnv != "development" {
-			return errors.New("unexpected APP_ENV value, expected 'development'")
-		}
-
-		log.Println("Running in development environment")
-	} else {
-		return errors.New("unexpected APP_ENV value, expected 'production' or 'development'")
-	}
-
-	return nil
 }

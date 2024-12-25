@@ -5,26 +5,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 // SendEmail envoie un email via SendGrid
 func SendEmail(to string, subject string, body string) error {
-	cwd, err2 := os.Getwd()
-	if err2 != nil {
-		log.Printf("Error getting current working directory: %v", err2)
-	} else {
-		log.Printf("Current working directory: %s", cwd)
-	}
-
-	// Charger le fichier .env
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Printf("Error loading .env file: %v", err)
-		return err
-	}
 
 	// Récupérer la clé API depuis les variables d'environnement
 	apiKey := os.Getenv("SENDGRID_API_KEY")

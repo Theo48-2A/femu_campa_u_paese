@@ -19,12 +19,6 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=theo
-      - DB_PASSWORD=yourpassword
-      - DB_NAME=user_db
     networks:
       - app-network
     volumes:

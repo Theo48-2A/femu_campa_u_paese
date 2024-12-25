@@ -10,6 +10,7 @@ server/*.out
 # Docker
 *.env
 *.env.*
+docker-compose.override.yml
 
 # Logs et fichiers temporaires
 *.log

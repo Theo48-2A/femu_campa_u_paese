@@ -28,5 +28,6 @@ func main() {
 
 	// Lancer le serveur HTTP
 	log.Printf("Connect to %s/api/playground for GraphQL playground", config.AppConfig.ServerURL)
-	log.Fatal(http.ListenAndServe("0.0.0.0:"+config.AppConfig.SrvPort, mux))
+	log.Fatal(http.ListenAndServe(config.AppConfig.SrvListenAddr+":"+config.AppConfig.SrvPort, mux))
+
 }

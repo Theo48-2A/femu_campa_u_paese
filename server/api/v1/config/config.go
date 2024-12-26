@@ -12,6 +12,7 @@ type Config struct {
 	SrvProtocol    string `mapstructure:"SRV_PROTOCOL"`
 	SrvIP          string `mapstructure:"SRV_IP"`
 	SrvPort        string `mapstructure:"SRV_PORT"`
+	SrvListenAddr  string `mapstructure:"SRV_LISTEN_ADDR"`
 	DBUser         string `mapstructure:"DB_USER"`
 	DBPassword     string `mapstructure:"DB_PASSWORD"`
 	DBIP           string `mapstructure:"DB_IP"`
@@ -30,6 +31,7 @@ func LoadConfig() {
 	viper.BindEnv("SRV_PROTOCOL")
 	viper.BindEnv("SRV_IP")
 	viper.BindEnv("SRV_PORT")
+	viper.BindEnv("SRV_LISTEN_ADDR")
 	viper.BindEnv("DB_USER")
 	viper.BindEnv("DB_PASSWORD")
 	viper.BindEnv("DB_IP")
@@ -52,6 +54,7 @@ func LoadConfig() {
 	log.Printf("  SRV_PROTOCOL: %s", AppConfig.SrvProtocol)
 	log.Printf("  SRV_IP: %s", AppConfig.SrvIP)
 	log.Printf("  SRV_PORT: %s", AppConfig.SrvPort)
+	log.Printf("  SRV_LISTEN_ADDR: %s", AppConfig.SrvListenAddr)
 	log.Printf("  DB_USER: %s", AppConfig.DBUser)
 	log.Printf("  DB_PASSWORD: %s", AppConfig.DBPassword)
 	log.Printf("  DB_IP: %s", AppConfig.DBIP)
@@ -93,6 +96,10 @@ func validateConfig() {
 
 	if AppConfig.SrvPort == "" {
 		log.Fatalf("SRV_PORT is missing")
+	}
+
+	if AppConfig.SrvListenAddr == "" {
+		log.Fatalf("SRV_LISTEN_ADDR is missing")
 	}
 
 	if AppConfig.ServerURL == "" {

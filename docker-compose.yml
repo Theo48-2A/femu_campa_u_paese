@@ -31,6 +31,7 @@ services:
       SRV_PROTOCOL: ${SRV_PROTOCOL} 
       SRV_IP: ${SRV_IP} 
       SRV_PORT: ${SRV_PORT} 
+      SRV_LISTEN_ADDR: ${SRV_LISTEN_ADDR} 
       DB_USER: ${DB_USER} 
       DB_PASSWORD: ${DB_PASSWORD} 
       DB_IP: ${DB_IP} 

@@ -8,17 +8,18 @@ import (
 )
 
 type Config struct {
-	AppEnv      string `mapstructure:"APP_ENV"`
-	SrvProtocol string `mapstructure:"SRV_PROTOCOL"`
-	SrvIP       string `mapstructure:"SRV_IP"`
-	SrvPort     string `mapstructure:"SRV_PORT"`
-	DBUser      string `mapstructure:"DB_USER"`
-	DBPassword  string `mapstructure:"DB_PASSWORD"`
-	DBIP        string `mapstructure:"DB_IP"`
-	DBPort      string `mapstructure:"DB_PORT"`
-	DBName      string `mapstructure:"DB_NAME"`
-	ServerURL   string
-	DatabaseURL string
+	AppEnv         string `mapstructure:"APP_ENV"`
+	SrvProtocol    string `mapstructure:"SRV_PROTOCOL"`
+	SrvIP          string `mapstructure:"SRV_IP"`
+	SrvPort        string `mapstructure:"SRV_PORT"`
+	DBUser         string `mapstructure:"DB_USER"`
+	DBPassword     string `mapstructure:"DB_PASSWORD"`
+	DBIP           string `mapstructure:"DB_IP"`
+	DBPort         string `mapstructure:"DB_PORT"`
+	DBName         string `mapstructure:"DB_NAME"`
+	SendGridAPIKey string `mapstructure:"SENDGRID_API_KEY"`
+	ServerURL      string
+	DatabaseURL    string
 }
 
 var AppConfig Config
@@ -34,6 +35,7 @@ func LoadConfig() {
 	viper.BindEnv("DB_IP")
 	viper.BindEnv("DB_PORT")
 	viper.BindEnv("DB_NAME")
+	viper.BindEnv("SENDGRID_API_KEY")
 
 	// Décoder les variables d'environnement dans la structure Config
 	if err := viper.Unmarshal(&AppConfig); err != nil {
@@ -55,6 +57,7 @@ func LoadConfig() {
 	log.Printf("  DB_IP: %s", AppConfig.DBIP)
 	log.Printf("  DB_PORT: %s", AppConfig.DBPort)
 	log.Printf("  DB_NAME: %s", AppConfig.DBName)
+	log.Printf("  SENDGRID_API_KEY: %s", AppConfig.SendGridAPIKey)
 	log.Printf("  SERVER_URL: %s", AppConfig.ServerURL)
 	log.Printf("  DATABASE_URL: %s", AppConfig.DatabaseURL)
 
@@ -98,6 +101,10 @@ func validateConfig() {
 
 	if AppConfig.DatabaseURL == "" {
 		log.Fatalf("DATABASE_URL is missing")
+	}
+
+	if AppConfig.SendGridAPIKey == "" {
+		log.Fatalf("SENDGRID_API_KEY is missing")
 	}
 
 	fmt.Println("Configuration loaded and validated successfully")

@@ -4,21 +4,22 @@ services:
       context: ./client
     container_name: client_container
     ports:
-      - "3000:3000"
+      - ${CL_PORT}:${CL_PORT} 
     volumes:
       - ./client:/app
       - /app/node_modules
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL}
-      APP_ENV: ${APP_ENV}       
-
+      APP_ENV: ${APP_ENV}  
+      SRV_PROTOCOL: ${SRV_PROTOCOL} 
+      SRV_IP: ${SRV_IP} 
+      SRV_PORT: ${SRV_PORT}      
 
   server:
     build:
       context: ./server
     container_name: server_container
     ports:
-      - "8080:8080"
+      - ${SRV_PORT}:${SRV_PORT} 
     depends_on:
       - db
     networks:
@@ -34,7 +35,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD} 
       DB_IP: ${DB_IP} 
       DB_PORT: ${DB_PORT} 
-      DB_NAME: ${DB_NAME} 
+      DB_NAME: ${DB_NAME}
+      SENDGRID_API_KEY: "${SENDGRID_API_KEY}" 
 
   db:
     image: postgres:17
@@ -44,7 +46,7 @@ services:
       POSTGRES_PASSWORD: yourpassword
       POSTGRES_DB: user_db
     ports:
-      - "5432:5432"
+      - ${DB_PORT}:${DB_PORT} 
     volumes:
       - ./db:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
